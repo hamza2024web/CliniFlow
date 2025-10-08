@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="cliniquePU" transaction-type="JTA">
+        <!--
+            JTA = Java Transaction API
+            Le serveur (WildFly) gère automatiquement les transactions
+        -->
+
+        <!-- DataSource créée dans WildFly -->
+        <jta-data-source>java:jboss/datasources/CliniqueDS</jta-data-source>
+
+        <!--
+            Liste TOUTES vos entités ici
+            Ordre : des plus simples (sans dépendances) aux plus complexes
+        -->
+
+        <!-- Entités Simples (pas de dépendances) -->
+        <class>com.clinique.domain.Department</class>
+        <class>com.clinique.domain.Specialty</class>
+        <class>com.clinique.domain.User</class>
+        <class>com.clinique.domain.MedicalNote</class>
+
+        <!-- Entités avec Dépendances -->
+        <class>com.clinique.domain.Patient</class>
+        <class>com.clinique.domain.Doctor</class>
+        <class>com.clinique.domain.MedicalRecord</class>
+        <class>com.clinique.domain.Appointment</class>
+        <class>com.clinique.domain.WaitingListEntry</class>
+        <class>com.clinique.domain.Availability</class>
+
+        <properties>
+            <!--
+                Dialect : Le "langage SQL" spécifique à PostgreSQL
+                Hibernate traduit les requêtes Java en SQL PostgreSQL
+            -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+            <!--
+                hibernate.hbm2ddl.auto = C'EST LA MAGIE ! (comme php artisan migrate)
+
+                Valeurs possibles :
+                - "create" : Supprime et recrée les tables à chaque démarrage (DANGEREUX)
+                - "create-drop" : Crée au démarrage, supprime à l'arrêt (pour tests)
+                - "update" : Met à jour la structure (RECOMMANDÉ en développement)
+                - "validate" : Vérifie que les tables correspondent aux entités (production)
+                - "none" : Ne fait rien (vous gérez manuellement)
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Affiche les requêtes SQL générées dans les logs (pour apprendre/déboguer) -->
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!-- Formatte les requêtes SQL (plus lisible) -->
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!-- Active les commentaires SQL (explique ce que fait chaque requête) -->
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <!-- Encodage UTF-8 (pour les accents français) -->
+            <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+
+            <!--
+                Stratégie de nommage : comment Hibernate traduit les noms Java → SQL
+                Exemple : "firstName" (Java) → "first_name" (SQL)
+            -->
+            <property name="hibernate.physical_naming_strategy"
+                      value="org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy"/>
+        </properties>
+    </persistence-unit>
+</persistence>
