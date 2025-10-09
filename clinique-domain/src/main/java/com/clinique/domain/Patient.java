@@ -44,7 +44,7 @@ public class Patient {
     @OneToMany(mappedBy = "patient" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "patient" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToOne(mappedBy = "patient" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
     private MedicalRecord medicalRecord;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
