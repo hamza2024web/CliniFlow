@@ -1,5 +1,6 @@
-package domain;
+package com.clinique.domain;
 
+import com.clinique.domain.Enum.DayOfWeek;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 

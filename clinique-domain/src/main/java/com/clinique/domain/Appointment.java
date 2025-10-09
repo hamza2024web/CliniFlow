@@ -1,6 +1,7 @@
-package domain;
+package com.clinique.domain;
 
-import domain.Enum.AppointmentStatus;
+import com.clinique.domain.Enum.AppointmentStatus;
+import com.clinique.domain.Enum.AppointmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;

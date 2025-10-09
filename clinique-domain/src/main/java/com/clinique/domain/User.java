@@ -1,6 +1,6 @@
-package domain;
+package com.clinique.domain;
 
-import domain.Enum.Role;
+import com.clinique.domain.Enum.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;

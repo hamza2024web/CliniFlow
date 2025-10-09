@@ -1,6 +1,5 @@
-package domain;
+package com.clinique.domain;
 
-import domain.Patient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 

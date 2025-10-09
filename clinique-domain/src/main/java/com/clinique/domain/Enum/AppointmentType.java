@@ -1,4 +1,4 @@
-package domain.Enum;
+package com.clinique.domain.Enum;
 
 public enum AppointmentType {
     CONSULTATION,

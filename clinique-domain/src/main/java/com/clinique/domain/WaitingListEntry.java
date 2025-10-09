@@ -1,7 +1,7 @@
-package domain;
+package com.clinique.domain;
 
-import domain.Enum.Priority;
-import domain.Enum.WaitingListStatus;
+import com.clinique.domain.Enum.Priority;
+import com.clinique.domain.Enum.WaitingListStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
