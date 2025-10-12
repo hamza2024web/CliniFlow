@@ -7,7 +7,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "availabilities")
+@Table(name = "availabilities",schema="public")
 public class Availability {
 
     @Id

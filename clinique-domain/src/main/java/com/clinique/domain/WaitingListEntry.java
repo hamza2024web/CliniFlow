@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "waiting_list")
+@Table(name = "waiting_list",schema="public")
 public class WaitingListEntry {
 
     @Id
