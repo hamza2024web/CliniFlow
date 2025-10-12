@@ -23,6 +23,16 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.clinique</groupId>
+            <artifactId>clinique-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.clinique</groupId>
+            <artifactId>clinique-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 
