@@ -18,6 +18,95 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f7fafc;
             color: #2d3748;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .sidebar-header .role-badge {
+            display: inline-block;
+            background: #e53e3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 12px;
+            background: #e53e3e;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
             padding: 30px;
             min-height: 100vh;
         }
@@ -217,7 +306,17 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            body {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .main-content {
                 padding: 15px;
             }
 
@@ -245,82 +344,136 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <a href="<%= request.getContextPath() %>/admin/users" class="back-link">← Retour à la liste</a>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Clinique Digitale</h2>
+            <span class="role-badge">ADMINISTRATEUR</span>
+        </div>
 
-    <h1>✏️ Modifier l'Utilisateur</h1>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    Tableau de bord
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/users" class="nav-link active">
+                    <span class="nav-icon">👥</span>
+                    Gestion des utilisateurs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🏥</span>
+                    Départements
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🎓</span>
+                    Spécialités
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    Configuration
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    Statistiques
+                </a>
+            </li>
+        </ul>
 
-    <%
-        String error = (String) request.getAttribute("error");
-        if (error != null) {
-    %>
-    <div class="alert alert-error"><%= error %></div>
-    <% } %>
+        <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Se déconnecter</a>
+    </aside>
 
-    <%
-        UserDTO user = (UserDTO) request.getAttribute("user");
-        if (user != null) {
-    %>
-    <div class="info-box">
-        <strong>ID:</strong> #<%= user.getId() %> |
-        <strong>Créé le:</strong> <%= user.getCreatedAt() != null ? user.getCreatedAt().toString().substring(0, 10) : "N/A" %>
-    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <a href="<%= request.getContextPath() %>/admin/users" class="back-link">← Retour à la liste</a>
 
-    <div class="form-container">
-        <form method="post" action="<%= request.getContextPath() %>/admin/users/edit">
-            <input type="hidden" name="id" value="<%= user.getId() %>">
+            <h1>✏️ Modifier l'Utilisateur</h1>
 
-            <div class="form-group">
-                <label for="firstName" class="required">Prénom</label>
-                <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required>
+            <%
+                String error = (String) request.getAttribute("error");
+                if (error != null) {
+            %>
+            <div class="alert alert-error"><%= error %></div>
+            <% } %>
+
+            <%
+                UserDTO user = (UserDTO) request.getAttribute("user");
+                if (user != null) {
+            %>
+            <div class="info-box">
+                <strong>ID:</strong> #<%= user.getId() %> |
+                <strong>Créé le:</strong> <%= user.getCreatedAt() != null ? user.getCreatedAt().toString().substring(0, 10) : "N/A" %>
             </div>
 
-            <div class="form-group">
-                <label for="lastName" class="required">Nom</label>
-                <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required>
-            </div>
+            <div class="form-container">
+                <form method="post" action="<%= request.getContextPath() %>/admin/users/edit">
+                    <input type="hidden" name="id" value="<%= user.getId() %>">
 
-            <div class="form-group">
-                <label for="email" class="required">Email</label>
-                <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
-            </div>
-
-            <div class="form-group">
-                <label class="required">Rôles</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="role-admin" name="roles" value="ADMIN"
-                            <%= user.getRole().contains("ADMIN") ? "checked" : "" %>>
-                        <label for="role-admin">👑 Administrateur</label>
+                    <div class="form-group">
+                        <label for="firstName" class="required">Prénom</label>
+                        <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="role-doctor" name="roles" value="DOCTOR"
-                            <%= Objects.equals(user.getRole(), "DOCTOR") ? "checked" : "" %>>
-                        <label for="role-doctor">👨‍⚕️ Docteur</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="role-staff" name="roles" value="STAFF"
-                            <%= Objects.equals(user.getRole(),"STAFF") ? "checked" : "" %>>
-                        <label for="role-staff">👔 Personnel</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="role-patient" name="roles" value="PATIENT"
-                            <%= Objects.equals(user.getRole(),"PATIENT") ? "checked" : "" %>>
-                        <label for="role-patient">🧑 Patient</label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-warning">✓ Enregistrer les modifications</button>
-                <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
+                    <div class="form-group">
+                        <label for="lastName" class="required">Nom</label>
+                        <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Rôles</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role-admin" name="roles" value="ADMIN"
+                                    <%= user.getRole().contains("ADMIN") ? "checked" : "" %>>
+                                <label for="role-admin">👑 Administrateur</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role-doctor" name="roles" value="DOCTOR"
+                                    <%= Objects.equals(user.getRole(), "DOCTOR") ? "checked" : "" %>>
+                                <label for="role-doctor">👨‍⚕️ Docteur</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role-staff" name="roles" value="STAFF"
+                                    <%= Objects.equals(user.getRole(),"STAFF") ? "checked" : "" %>>
+                                <label for="role-staff">👔 Personnel</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role-patient" name="roles" value="PATIENT"
+                                    <%= Objects.equals(user.getRole(),"PATIENT") ? "checked" : "" %>>
+                                <label for="role-patient">🧑 Patient</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-warning">✓ Enregistrer les modifications</button>
+                        <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-    <% } else { %>
-    <div class="alert alert-error">Utilisateur introuvable.</div>
-    <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Retour à la liste</a>
-    <% } %>
+            <% } else { %>
+            <div class="alert alert-error">Utilisateur introuvable.</div>
+            <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Retour à la liste</a>
+            <% } %>
+        </div>
+    </main>
 </div>
 </body>
 </html>

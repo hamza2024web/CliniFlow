@@ -16,6 +16,95 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f7fafc;
             color: #2d3748;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .sidebar-header .role-badge {
+            display: inline-block;
+            background: #e53e3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 12px;
+            background: #e53e3e;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
             padding: 30px;
             min-height: 100vh;
         }
@@ -210,7 +299,17 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            body {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .main-content {
                 padding: 15px;
             }
 
@@ -238,77 +337,131 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <a href="<%= request.getContextPath() %>/admin/users" class="back-link">← Retour à la liste</a>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Clinique Digitale</h2>
+            <span class="role-badge">ADMINISTRATEUR</span>
+        </div>
 
-    <h1>➕ Créer un Nouvel Utilisateur</h1>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    Tableau de bord
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/users" class="nav-link active">
+                    <span class="nav-icon">👥</span>
+                    Gestion des utilisateurs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🏥</span>
+                    Départements
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🎓</span>
+                    Spécialités
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    Configuration
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    Statistiques
+                </a>
+            </li>
+        </ul>
 
-    <%
-        String error = (String) request.getAttribute("error");
-        if (error != null) {
-    %>
-    <div class="alert alert-error"><%= error %></div>
-    <% } %>
+        <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Se déconnecter</a>
+    </aside>
 
-    <div class="form-container">
-        <form method="post" action="<%= request.getContextPath() %>/admin/users/create">
-            <div class="form-group">
-                <label for="firstName" class="required">Prénom</label>
-                <input type="text" id="firstName" name="firstName"
-                       value="<%= request.getAttribute("firstName") != null ? request.getAttribute("firstName") : "" %>"
-                       required>
-            </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <a href="<%= request.getContextPath() %>/admin/users" class="back-link">← Retour à la liste</a>
 
-            <div class="form-group">
-                <label for="lastName" class="required">Nom</label>
-                <input type="text" id="lastName" name="lastName"
-                       value="<%= request.getAttribute("lastName") != null ? request.getAttribute("lastName") : "" %>"
-                       required>
-            </div>
+            <h1>➕ Créer un Nouvel Utilisateur</h1>
 
-            <div class="form-group">
-                <label for="email" class="required">Email</label>
-                <input type="email" id="email" name="email"
-                       value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"
-                       required>
-                <div class="help-text">L'email servira d'identifiant de connexion</div>
-            </div>
+            <%
+                String error = (String) request.getAttribute("error");
+                if (error != null) {
+            %>
+            <div class="alert alert-error"><%= error %></div>
+            <% } %>
 
-            <div class="form-group">
-                <label for="password" class="required">Mot de passe</label>
-                <input type="password" id="password" name="password" required minlength="6">
-                <div class="help-text">Minimum 6 caractères</div>
-            </div>
-
-            <div class="form-group">
-                <label class="required">Rôle</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="role-admin" name="role" value="ADMIN" required>
-                        <label for="role-admin">👑 Administrateur</label>
+            <div class="form-container">
+                <form method="post" action="<%= request.getContextPath() %>/admin/users/create">
+                    <div class="form-group">
+                        <label for="firstName" class="required">Prénom</label>
+                        <input type="text" id="firstName" name="firstName"
+                               value="<%= request.getAttribute("firstName") != null ? request.getAttribute("firstName") : "" %>"
+                               required>
                     </div>
-                    <div class="radio-item">
-                        <input type="radio" id="role-doctor" name="role" value="DOCTOR">
-                        <label for="role-doctor">👨‍⚕️ Docteur</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="role-staff" name="role" value="STAFF">
-                        <label for="role-staff">👔 Personnel</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="role-patient" name="role" value="PATIENT">
-                        <label for="role-patient">🧑 Patient</label>
-                    </div>
-                </div>
-                <div class="help-text">Sélectionnez un rôle</div>
-            </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">✓ Créer l'utilisateur</button>
-                <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
+                    <div class="form-group">
+                        <label for="lastName" class="required">Nom</label>
+                        <input type="text" id="lastName" name="lastName"
+                               value="<%= request.getAttribute("lastName") != null ? request.getAttribute("lastName") : "" %>"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <input type="email" id="email" name="email"
+                               value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"
+                               required>
+                        <div class="help-text">L'email servira d'identifiant de connexion</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="required">Mot de passe</label>
+                        <input type="password" id="password" name="password" required minlength="6">
+                        <div class="help-text">Minimum 6 caractères</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Rôle</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="role-admin" name="role" value="ADMIN" required>
+                                <label for="role-admin">👑 Administrateur</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="role-doctor" name="role" value="DOCTOR">
+                                <label for="role-doctor">👨‍⚕️ Docteur</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="role-staff" name="role" value="STAFF">
+                                <label for="role-staff">👔 Personnel</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="role-patient" name="role" value="PATIENT">
+                                <label for="role-patient">🧑 Patient</label>
+                            </div>
+                        </div>
+                        <div class="help-text">Sélectionnez un rôle</div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">✓ Créer l'utilisateur</button>
+                        <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
+        </div>
+    </main>
 </div>
 </body>
 </html>

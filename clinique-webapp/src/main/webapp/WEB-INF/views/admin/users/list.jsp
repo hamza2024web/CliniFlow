@@ -18,6 +18,95 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f7fafc;
             color: #2d3748;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .sidebar-header .role-badge {
+            display: inline-block;
+            background: #e53e3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 12px;
+            background: #e53e3e;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
             padding: 30px;
         }
 
@@ -287,6 +376,16 @@
         }
 
         @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
             body {
                 padding: 15px;
             }
@@ -312,144 +411,198 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <a href="<%= request.getContextPath() %>/admin/dashboard" class="back-link">← Retour au Dashboard</a>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Clinique Digitale</h2>
+            <span class="role-badge">ADMINISTRATEUR</span>
+        </div>
 
-    <div class="header">
-        <h1>👥 Gestion des Utilisateurs</h1>
-        <a href="<%= request.getContextPath() %>/admin/users/create" class="btn btn-primary">
-            ➕ Créer un utilisateur
-        </a>
-    </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    Tableau de bord
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%= request.getContextPath() %>/admin/users" class="nav-link active">
+                    <span class="nav-icon">👥</span>
+                    Gestion des utilisateurs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🏥</span>
+                    Départements
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🎓</span>
+                    Spécialités
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    Configuration
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    Statistiques
+                </a>
+            </li>
+        </ul>
 
-    <%
-        String success = request.getParameter("success");
-        String error = request.getParameter("error");
+        <a href="<%= request.getContextPath() %>/logout" class="logout-btn">Se déconnecter</a>
+    </aside>
 
-        if (success != null) {
-            String message = "";
-            switch(success) {
-                case "created": message = "✓ Utilisateur créé avec succès !"; break;
-                case "updated": message = "✓ Utilisateur modifié avec succès !"; break;
-                case "deleted": message = "✓ Utilisateur supprimé avec succès !"; break;
-                case "status_updated": message = "✓ Statut de l'utilisateur modifié !"; break;
-                default: message = "✓ Opération réussie !";
-            }
-    %>
-    <div class="alert alert-success"><%= message %></div>
-    <%
-        }
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <a href="<%= request.getContextPath() %>/admin/dashboard" class="back-link">← Retour au Dashboard</a>
 
-        if (error != null) {
-            String message = "";
-            switch(error) {
-                case "missing_id": message = "❌ ID manquant."; break;
-                case "user_not_found": message = "❌ Utilisateur introuvable."; break;
-                case "invalid_id": message = "❌ ID invalide."; break;
-                case "cannot_delete_self": message = "❌ Vous ne pouvez pas vous supprimer vous-même."; break;
-                case "delete_failed": message = "❌ Échec de la suppression."; break;
-                case "server_error": message = "❌ Erreur serveur."; break;
-                default: message = "❌ Une erreur est survenue.";
-            }
-    %>
-    <div class="alert alert-error"><%= message %></div>
-    <% } %>
+            <div class="header">
+                <h1>👥 Gestion des Utilisateurs</h1>
+                <a href="<%= request.getContextPath() %>/admin/users/create" class="btn btn-primary">
+                    ➕ Créer un utilisateur
+                </a>
+            </div>
 
-    <%
-        List<UserDTO> users = (List<UserDTO>) request.getAttribute("users");
-        if (users == null || users.isEmpty()) {
-    %>
-    <div class="no-data">
-        <p>Aucun utilisateur trouvé.</p>
-    </div>
-    <%
-    } else {
-    %>
-    <div class="table-container">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom Complet</th>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Statut</th>
-                <th>Date de Création</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
             <%
-                for (UserDTO user : users) {
-                    String role = user.getRole();
-                    String roleDisplay = (role != null) ? role : "N/A";
+                String success = request.getParameter("success");
+                String error = request.getParameter("error");
 
-                    String badgeClass = "badge";
-                    if (role != null) {
-                        switch(role) {
-                            case "ADMIN":
-                                badgeClass += " badge-admin";
-                                break;
-                            case "DOCTOR":
-                                badgeClass += " badge-doctor";
-                                break;
-                            case "PATIENT":
-                                badgeClass += " badge-patient";
-                                break;
-                            case "STAFF":
-                                badgeClass += " badge-staff";
-                                break;
-                        }
+                if (success != null) {
+                    String message = "";
+                    switch(success) {
+                        case "created": message = "✓ Utilisateur créé avec succès !"; break;
+                        case "updated": message = "✓ Utilisateur modifié avec succès !"; break;
+                        case "deleted": message = "✓ Utilisateur supprimé avec succès !"; break;
+                        case "status_updated": message = "✓ Statut de l'utilisateur modifié !"; break;
+                        default: message = "✓ Opération réussie !";
                     }
             %>
-            <tr>
-                <td>#<%= user.getId() %></td>
-                <td><strong><%= user.getFullName() %></strong></td>
-                <td><%= user.getEmail() %></td>
-                <td>
-                    <span class="<%= badgeClass %>"><%= roleDisplay %></span>
-                </td>
-                <td>
-                    <% if (user.isActive()) { %>
-                    <span class="status status-active">Actif</span>
-                    <% } else { %>
-                    <span class="status status-inactive">Inactif</span>
-                    <% } %>
-                </td>
-                <td><%= user.getCreatedAt() != null ? user.getCreatedAt().toString().substring(0, 10) : "N/A" %></td>
-                <td>
-                    <div class="actions">
-                        <a href="<%= request.getContextPath() %>/admin/users/edit?id=<%= user.getId() %>"
-                           class="btn btn-warning btn-sm" title="Modifier">
-                            ✏️ Modifier
-                        </a>
+            <div class="alert alert-success"><%= message %></div>
+            <%
+                }
 
-                        <form method="post" action="<%= request.getContextPath() %>/admin/users/toggle-status"
-                              style="display: inline; margin: 0;">
-                            <input type="hidden" name="id" value="<%= user.getId() %>">
-                            <button type="submit"
-                                    class="btn <%= user.isActive() ? "btn-secondary" : "btn-success" %> btn-sm"
-                                    title="<%= user.isActive() ? "Désactiver" : "Activer" %>">
-                                <%= user.isActive() ? "🚫 Désactiver" : "✓ Activer" %>
-                            </button>
-                        </form>
-
-                        <form method="post" action="<%= request.getContextPath() %>/admin/users/delete"
-                              style="display: inline; margin: 0;"
-                              onsubmit="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer <%= user.getFullName() %> ?');">
-                            <input type="hidden" name="id" value="<%= user.getId() %>">
-                            <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
-                                🗑️ Supprimer
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
+                if (error != null) {
+                    String message = "";
+                    switch(error) {
+                        case "missing_id": message = "❌ ID manquant."; break;
+                        case "user_not_found": message = "❌ Utilisateur introuvable."; break;
+                        case "invalid_id": message = "❌ ID invalide."; break;
+                        case "cannot_delete_self": message = "❌ Vous ne pouvez pas vous supprimer vous-même."; break;
+                        case "delete_failed": message = "❌ Échec de la suppression."; break;
+                        case "server_error": message = "❌ Erreur serveur."; break;
+                        default: message = "❌ Une erreur est survenue.";
+                    }
+            %>
+            <div class="alert alert-error"><%= message %></div>
             <% } %>
-            </tbody>
-        </table>
-    </div>
-    <% } %>
+
+            <%
+                List<UserDTO> users = (List<UserDTO>) request.getAttribute("users");
+                if (users == null || users.isEmpty()) {
+            %>
+            <div class="no-data">
+                <p>Aucun utilisateur trouvé.</p>
+            </div>
+            <%
+            } else {
+            %>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom Complet</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Date de Création</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        for (UserDTO user : users) {
+                            String role = user.getRole();
+                            String roleDisplay = (role != null) ? role : "N/A";
+
+                            String badgeClass = "badge";
+                            if (role != null) {
+                                switch(role) {
+                                    case "ADMIN":
+                                        badgeClass += " badge-admin";
+                                        break;
+                                    case "DOCTOR":
+                                        badgeClass += " badge-doctor";
+                                        break;
+                                    case "PATIENT":
+                                        badgeClass += " badge-patient";
+                                        break;
+                                    case "STAFF":
+                                        badgeClass += " badge-staff";
+                                        break;
+                                }
+                            }
+                    %>
+                    <tr>
+                        <td>#<%= user.getId() %></td>
+                        <td><strong><%= user.getFullName() %></strong></td>
+                        <td><%= user.getEmail() %></td>
+                        <td>
+                            <span class="<%= badgeClass %>"><%= roleDisplay %></span>
+                        </td>
+                        <td>
+                            <% if (user.isActive()) { %>
+                            <span class="status status-active">Actif</span>
+                            <% } else { %>
+                            <span class="status status-inactive">Inactif</span>
+                            <% } %>
+                        </td>
+                        <td><%= user.getCreatedAt() != null ? user.getCreatedAt().toString().substring(0, 10) : "N/A" %></td>
+                        <td>
+                            <div class="actions">
+                                <a href="<%= request.getContextPath() %>/admin/users/edit?id=<%= user.getId() %>"
+                                   class="btn btn-warning btn-sm" title="Modifier">
+                                    ✏️ Modifier
+                                </a>
+
+                                <form method="post" action="<%= request.getContextPath() %>/admin/users/toggle-status"
+                                      style="display: inline; margin: 0;">
+                                    <input type="hidden" name="id" value="<%= user.getId() %>">
+                                    <button type="submit"
+                                            class="btn <%= user.isActive() ? "btn-secondary" : "btn-success" %> btn-sm"
+                                            title="<%= user.isActive() ? "Désactiver" : "Activer" %>">
+                                        <%= user.isActive() ? "🚫 Désactiver" : "✓ Activer" %>
+                                    </button>
+                                </form>
+
+                                <form method="post" action="<%= request.getContextPath() %>/admin/users/delete"
+                                      style="display: inline; margin: 0;"
+                                      onsubmit="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer <%= user.getFullName() %> ?');">
+                                    <input type="hidden" name="id" value="<%= user.getId() %>">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                        🗑️ Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </div>
+    </main>
 </div>
 </body>
 </html>
