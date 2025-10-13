@@ -308,7 +308,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/admin/users" class="nav-link">
                     <span class="nav-icon">👥</span>
                     Gestion des utilisateurs
                 </a>

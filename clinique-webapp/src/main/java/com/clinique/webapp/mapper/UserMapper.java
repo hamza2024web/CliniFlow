@@ -21,7 +21,7 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setActive(user.isActive());
         dto.setCreatedAt(user.getCreatedAt());
-        dto.setRole(user.getRole());
+        dto.setRole(String.valueOf(user.getRole()));
 
         return dto;
     }

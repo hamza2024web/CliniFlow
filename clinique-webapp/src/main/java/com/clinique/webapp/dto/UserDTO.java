@@ -11,7 +11,7 @@ public class UserDTO {
     private String lastName;
     private String email;
     private boolean active;
-    private Role role;
+    private String role;
     private LocalDateTime createdAt;
 
     // Constructeurs
@@ -33,8 +33,8 @@ public class UserDTO {
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
