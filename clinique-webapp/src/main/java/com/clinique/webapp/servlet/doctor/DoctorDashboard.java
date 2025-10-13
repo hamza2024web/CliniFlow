@@ -1,4 +1,4 @@
-package com.clinique.webapp.servlet;
+package com.clinique.webapp.servlet.doctor;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/admin/dashboard")
-public class AdminDashboard extends HttpServlet {
+@WebServlet("/doctor/dashboard")
+public class DoctorDashboard extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/doctor/dashboard.jsp").forward(request, response);
     }
 }
