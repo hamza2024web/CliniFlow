@@ -13,7 +13,7 @@ import service.Interface.UserService;
 import java.io.IOException;
 
 @WebServlet("/admin/users/create")
-public class UserCreate extends HttpServlet {
+public class UserCreateServlet extends HttpServlet {
 
     @Inject
     private UserService userService;
