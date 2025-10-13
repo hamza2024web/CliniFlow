@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import repository.Interface.UserRepository;
 import service.Interface.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -62,5 +63,63 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User updateUser(Long id, String prenom, String nom, String email, Role role) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + id));
+
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(id)){
+            throw new IllegalArgumentException("Cet email est déjà utilisé par un autre utilisateur");
+        }
+
+        user.setFirstName(prenom);
+        user.setLastName(nom);
+        user.setEmail(email);
+
+        user.setRole(role);
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(Long userId, String newPlainPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + userId));
+
+        String hashedPassword = BCrypt.hashpw(newPlainPassword, BCrypt.gensalt(12));
+        user.setPassword(hashedPassword);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void toggleUserStatus(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + userId));
+
+        user.setActive(!user.isActive());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + userId));
+
+        userRepository.delete(user);
+    }
+
+    @Override
+    public List<User> searchUsers(String keyword) {
+        return userRepository.findAll();
     }
 }
