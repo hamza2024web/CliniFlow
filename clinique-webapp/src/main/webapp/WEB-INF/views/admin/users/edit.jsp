@@ -2,9 +2,247 @@
 <%@ page import="com.clinique.webapp.dto.UserDTO" %>
 <%@ page import="java.util.Objects" %>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier un Utilisateur - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            color: #2d3748;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            color: #742a2a;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #ebf4ff 0%, #e9d8fd 100%);
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #2d3748;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e53e3e;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Checkbox Group */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .checkbox-item:has(input:checked) {
+            border-color: #667eea;
+            background: #ebf4ff;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(237, 137, 54, 0.4);
+        }
+
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -28,55 +266,57 @@
         <strong>Créé le:</strong> <%= user.getCreatedAt() != null ? user.getCreatedAt().toString().substring(0, 10) : "N/A" %>
     </div>
 
-    <form method="post" action="<%= request.getContextPath() %>/admin/users/edit">
-        <input type="hidden" name="id" value="<%= user.getId() %>">
+    <div class="form-container">
+        <form method="post" action="<%= request.getContextPath() %>/admin/users/edit">
+            <input type="hidden" name="id" value="<%= user.getId() %>">
 
-        <div class="form-group">
-            <label for="firstName" class="required">Prénom</label>
-            <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required>
-        </div>
+            <div class="form-group">
+                <label for="firstName" class="required">Prénom</label>
+                <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required>
+            </div>
 
-        <div class="form-group">
-            <label for="lastName" class="required">Nom</label>
-            <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required>
-        </div>
+            <div class="form-group">
+                <label for="lastName" class="required">Nom</label>
+                <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required>
+            </div>
 
-        <div class="form-group">
-            <label for="email" class="required">Email</label>
-            <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
-        </div>
+            <div class="form-group">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
+            </div>
 
-        <div class="form-group">
-            <label class="required">Rôles</label>
-            <div class="checkbox-group">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="role-admin" name="roles" value="ADMIN"
-                        <%= user.getRole().contains("ADMIN") ? "checked" : "" %>>
-                    <label for="role-admin">👑 Administrateur</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="role-doctor" name="roles" value="DOCTOR"
-                        <%=Objects.equals(user.getRole(), "DOCTOR") ? "checked" : "" %>>
-                    <label for="role-doctor">👨‍⚕️ Docteur</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="role-staff" name="roles" value="STAFF"
-                        <%= Objects.equals(user.getRole(),"STAFF") ? "checked" : "" %>>
-                    <label for="role-staff">👔 Personnel</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="role-patient" name="roles" value="PATIENT"
-                        <%= Objects.equals(user.getRole(),"PATIENT") ? "checked" : "" %>>
-                    <label for="role-patient">🧑 Patient</label>
+            <div class="form-group">
+                <label class="required">Rôles</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="role-admin" name="roles" value="ADMIN"
+                            <%= user.getRole().contains("ADMIN") ? "checked" : "" %>>
+                        <label for="role-admin">👑 Administrateur</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="role-doctor" name="roles" value="DOCTOR"
+                            <%= Objects.equals(user.getRole(), "DOCTOR") ? "checked" : "" %>>
+                        <label for="role-doctor">👨‍⚕️ Docteur</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="role-staff" name="roles" value="STAFF"
+                            <%= Objects.equals(user.getRole(),"STAFF") ? "checked" : "" %>>
+                        <label for="role-staff">👔 Personnel</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="role-patient" name="roles" value="PATIENT"
+                            <%= Objects.equals(user.getRole(),"PATIENT") ? "checked" : "" %>>
+                        <label for="role-patient">🧑 Patient</label>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-warning">✓ Enregistrer les modifications</button>
-            <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
-        </div>
-    </form>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-warning">✓ Enregistrer les modifications</button>
+                <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Annuler</a>
+            </div>
+        </form>
+    </div>
     <% } else { %>
     <div class="alert alert-error">Utilisateur introuvable.</div>
     <a href="<%= request.getContextPath() %>/admin/users" class="btn btn-secondary">Retour à la liste</a>
