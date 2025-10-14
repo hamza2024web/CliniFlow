@@ -1,4 +1,4 @@
-package com.clinique.webapp.servlet.admin;
+package com.clinique.webapp.servlet.admin.users;
 
 import com.clinique.domain.Enum.Role;
 import com.clinique.domain.User;

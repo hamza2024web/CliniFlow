@@ -1,4 +1,4 @@
-package com.clinique.webapp.servlet.admin;
+package com.clinique.webapp.servlet.admin.users;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
