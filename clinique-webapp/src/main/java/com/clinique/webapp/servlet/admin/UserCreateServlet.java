@@ -24,21 +24,32 @@ public class UserCreateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException , IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-            Role role = Role.valueOf(request.getParameter("role"));
+            String roleParam = request.getParameter("role");
 
             if (firstName == null || firstName.trim().isEmpty() ||
                     lastName == null || lastName.trim().isEmpty() ||
                     email == null || email.trim().isEmpty() ||
                     password == null || password.trim().isEmpty() ||
-                    role.name().equals("null")  ){
-                request.setAttribute("error","Tous les champs sont obligatoires .");
-                request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request,response);
+                    roleParam == null || roleParam.trim().isEmpty()) {
+                request.setAttribute("error", "Tous les champs sont obligatoires.");
+                preserveFormData(request);
+                request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request, response);
+                return;
+            }
+
+            Role role;
+            try {
+                role = Role.valueOf(roleParam.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                request.setAttribute("error", "Rôle invalide.");
+                preserveFormData(request);
+                request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request, response);
                 return;
             }
 
@@ -51,17 +62,22 @@ public class UserCreateServlet extends HttpServlet {
             );
 
             response.sendRedirect(request.getContextPath() + "/admin/users?success=created");
-        } catch (IllegalArgumentException e){
+
+        } catch (IllegalArgumentException e) {
             request.setAttribute("error", e.getMessage());
-            request.setAttribute("firstName", request.getParameter("firstName"));
-            request.setAttribute("lastName", request.getParameter("lastName"));
-            request.setAttribute("email", request.getParameter("email"));
+            preserveFormData(request);
             request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Erreur dans UserCreateServlet : " + e.getMessage());
             e.printStackTrace();
-            request.setAttribute("error", "Erreur inattendue : " + e.getMessage());
+            request.setAttribute("error", "Erreur inattendue. Veuillez réessayer.");
             request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request, response);
         }
+    }
+
+    private void preserveFormData(HttpServletRequest request) {
+        request.setAttribute("firstName", request.getParameter("firstName"));
+        request.setAttribute("lastName", request.getParameter("lastName"));
+        request.setAttribute("email", request.getParameter("email"));
     }
 }

@@ -12,6 +12,6 @@ import java.io.IOException;
 public class PatientDashboard extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/views/patient/dashboard").forward(request , response);
+        request.getRequestDispatcher("/WEB-INF/views/patient/dashboard.jsp").forward(request , response);
     }
 }

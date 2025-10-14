@@ -21,14 +21,18 @@ public class LoginServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (userService == null) {
+            System.err.println("ERROR: UserService is null!");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Service not available");
+            return;
+        }
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -38,17 +42,9 @@ public class LoginServlet extends HttpServlet {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            // Invalidate any old session
-            HttpSession oldSession = request.getSession(false);
-            if (oldSession != null) {
-                oldSession.invalidate();
-            }
-
-            // Create new session
             HttpSession newSession = request.getSession(true);
             newSession.setAttribute("user", user);
 
-            // Redirect based on role
             String targetUrl = determineTargetUrl(user, request.getContextPath());
             response.sendRedirect(targetUrl);
         } else {
