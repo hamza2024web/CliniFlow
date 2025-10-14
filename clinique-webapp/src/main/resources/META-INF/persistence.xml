@@ -21,18 +21,12 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
-            <!-- CHANGEMENT CRITIQUE ICI -->
+            <!-- Use ONLY Hibernate's schema generation -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
-            <!-- SUPPRIMER OU COMMENTER CES LIGNES DANGEREUSES -->
-            <!-- <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/> -->
+            <!-- Disable Jakarta Persistence schema generation to avoid conflicts -->
             <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
-            <!-- <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/> -->
-            <!-- <property name="jakarta.persistence.schema-generation.drop-source" value="metadata"/> -->
             <property name="jakarta.persistence.schema-generation.scripts.action" value="none"/>
-
-            <!-- Charger import.sql SEULEMENT au premier démarrage -->
-            <!-- <property name="hibernate.hbm2ddl.import_files" value="import.sql"/> -->
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
@@ -44,5 +38,6 @@
 
             <property name="jakarta.persistence.validation.mode" value="AUTO"/>
         </properties>
+
     </persistence-unit>
 </persistence>

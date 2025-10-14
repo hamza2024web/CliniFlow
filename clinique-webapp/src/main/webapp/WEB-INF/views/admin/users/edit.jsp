@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.clinique.webapp.dto.UserDTO" %>
-<%@ page import="java.util.Objects" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -205,7 +204,8 @@
         }
 
         .form-group input[type="text"],
-        .form-group input[type="email"] {
+        .form-group input[type="email"],
+        .form-group select {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
@@ -213,52 +213,17 @@
             font-size: 15px;
             transition: all 0.3s;
             outline: none;
+            background: white;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        /* Checkbox Group */
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            transition: all 0.3s;
+        .form-group select {
             cursor: pointer;
-        }
-
-        .checkbox-item:hover {
-            border-color: #cbd5e0;
-            background: #f7fafc;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .checkbox-item label {
-            cursor: pointer;
-            margin: 0;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .checkbox-item:has(input:checked) {
-            border-color: #667eea;
-            background: #ebf4ff;
         }
 
         /* Form Actions */
@@ -314,9 +279,6 @@
 
             .main-content {
                 margin-left: 0;
-            }
-
-            .main-content {
                 padding: 15px;
             }
 
@@ -326,10 +288,6 @@
 
             h1 {
                 font-size: 24px;
-            }
-
-            .checkbox-group {
-                grid-template-columns: 1fr;
             }
 
             .form-actions {
@@ -437,29 +395,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="required">Rôles</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="role-admin" name="roles" value="ADMIN"
-                                    <%= user.getRole().contains("ADMIN") ? "checked" : "" %>>
-                                <label for="role-admin">👑 Administrateur</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="role-doctor" name="roles" value="DOCTOR"
-                                    <%= Objects.equals(user.getRole(), "DOCTOR") ? "checked" : "" %>>
-                                <label for="role-doctor">👨‍⚕️ Docteur</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="role-staff" name="roles" value="STAFF"
-                                    <%= Objects.equals(user.getRole(),"STAFF") ? "checked" : "" %>>
-                                <label for="role-staff">👔 Personnel</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="role-patient" name="roles" value="PATIENT"
-                                    <%= Objects.equals(user.getRole(),"PATIENT") ? "checked" : "" %>>
-                                <label for="role-patient">🧑 Patient</label>
-                            </div>
-                        </div>
+                        <label for="role" class="required">Rôle</label>
+                        <select id="role" name="role" required>
+                            <option value="">-- Sélectionner un rôle --</option>
+                            <option value="ADMIN" <%= "ADMIN".equals(user.getRole()) ? "selected" : "" %>>👑 Administrateur</option>
+                            <option value="MEDECIN" <%= "MEDECIN".equals(user.getRole()) ? "selected" : "" %>>👨‍⚕️ Médecin</option>
+                            <option value="STAFF" <%= "STAFF".equals(user.getRole()) ? "selected" : "" %>>👔 Personnelle</option>
+                            <option value="PATIENT" <%= "PATIENT".equals(user.getRole()) ? "selected" : "" %>>🧑 Patient</option>
+                        </select>
                     </div>
 
                     <div class="form-actions">

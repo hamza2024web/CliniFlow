@@ -26,7 +26,7 @@ public class UserEditServlet extends HttpServlet {
         try {
             String idParam = request.getParameter("id");
 
-            if (idParam == null || idParam.trim().isEmpty()){
+            if (idParam == null || idParam.trim().isEmpty()) {
                 response.sendRedirect(request.getContextPath() + "/admin/users?error=missing_id");
                 return;
             }
@@ -34,16 +34,17 @@ public class UserEditServlet extends HttpServlet {
             Long userId = Long.parseLong(idParam);
             Optional<User> userOpt = userService.findById(userId);
 
-            if (userOpt.isEmpty()){
-                response.sendRedirect(request.getContextPath() + "/admin/user?error=user_not_found");
+            if (userOpt.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/admin/users?error=user_not_found");
+                return; // IMPORTANT: Ajout du return manquant
             }
 
             UserDTO userDTO = UserMapper.toDTO(userOpt.get());
             request.setAttribute("user", userDTO);
             request.getRequestDispatcher("/WEB-INF/views/admin/users/edit.jsp").forward(request, response);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/admin/users?error=invalid_id");
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Erreur dans UserEditServlet (GET) : " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/admin/users?error=server_error");
@@ -51,25 +52,39 @@ public class UserEditServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException , IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // Récupération des paramètres
             String idParam = request.getParameter("id");
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             String email = request.getParameter("email");
-            Role role = Role.valueOf(request.getParameter("role"));
+            String roleParam = request.getParameter("role");
 
-            if (firstName == null || firstName.trim().isEmpty() ||
+            // Debug - à retirer en production
+            System.out.println("=== DEBUG POST ===");
+            System.out.println("id: " + idParam);
+            System.out.println("firstName: " + firstName);
+            System.out.println("lastName: " + lastName);
+            System.out.println("email: " + email);
+            System.out.println("role: " + roleParam);
+
+            // Validation AVANT d'utiliser valueOf()
+            if (idParam == null || idParam.trim().isEmpty() ||
+                    firstName == null || firstName.trim().isEmpty() ||
                     lastName == null || lastName.trim().isEmpty() ||
                     email == null || email.trim().isEmpty() ||
-                    role.name().equals("null") ){
-                request.setAttribute("error","Tous les champs sont obligatoires.");
-                doGet(request , response);
+                    roleParam == null || roleParam.trim().isEmpty()) {
+                request.setAttribute("error", "Tous les champs sont obligatoires.");
+                doGet(request, response);
                 return;
             }
 
+            // Conversion sécurisée
             Long userId = Long.parseLong(idParam);
+            Role role = Role.valueOf(roleParam.trim());
 
+            // Mise à jour
             User updatedUser = userService.updateUser(
                     userId,
                     firstName.trim(),
@@ -79,10 +94,10 @@ public class UserEditServlet extends HttpServlet {
             );
 
             response.sendRedirect(request.getContextPath() + "/admin/users?success=updated");
-        } catch (IllegalArgumentException e){
-            request.setAttribute("error",e.getMessage());
-            doGet(request,response);
-        } catch (Exception e){
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("error", "Données invalides : " + e.getMessage());
+            doGet(request, response);
+        } catch (Exception e) {
             System.err.println("Erreur dans UserEditServlet (POST) : " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("error", "Erreur inattendue : " + e.getMessage());

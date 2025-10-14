@@ -81,8 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, String prenom, String nom, String email, Role role) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable avec l'ID : " + id));
 
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent() && !existingUser.get().getId().equals(id)){

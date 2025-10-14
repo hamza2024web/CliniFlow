@@ -20,11 +20,9 @@ public class UserRepositoryImpl implements UserRepository {
         if (user.getId() == null) {
             entityManager.persist(user);
             entityManager.flush();  // ← IMPORTANT
-            System.out.println("✅ User créé avec ID: " + user.getId());
         } else {
             user = entityManager.merge(user);
             entityManager.flush();  // ← IMPORTANT
-            System.out.println("✅ User mis à jour avec ID: " + user.getId());
         }
         return user;
     }
