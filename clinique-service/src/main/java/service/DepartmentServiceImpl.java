@@ -10,6 +10,7 @@ import service.Interface.DepartmentService;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Inject

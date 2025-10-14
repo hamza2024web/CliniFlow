@@ -30,7 +30,7 @@ public class SpecialityRepositoryImpl implements SpecialityRepository {
 
     @Override
     public List<Specialty> findAll() {
-        return em.createQuery("SELECT s FROM Specialty s", Specialty.class).getResultList();
+        return em.createQuery("SELECT s FROM Specialty s LEFT JOIN FETCH s.department", Specialty.class).getResultList();
     }
 
     @Override
