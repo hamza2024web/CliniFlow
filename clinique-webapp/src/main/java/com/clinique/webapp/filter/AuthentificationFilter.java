@@ -5,40 +5,72 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
-@WebFilter("/*")
+
+
 public class AuthentificationFilter implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
-    }
+    private static final java.util.logging.Logger LOGGER =
+            java.util.logging.Logger.getLogger(AuthentificationFilter.class.getName());
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        HttpSession session = request.getSession(false);
 
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
-        boolean isLoginPage = requestURI.endsWith("/login");
-        boolean isPublicRessource = requestURI.startsWith(request.getContextPath() + "/public/");
-        boolean isRoot = requestURI.equals(request.getContextPath() + "/");
+        LOGGER.info("=== FILTER START ===");
+        LOGGER.info("Method: " + method);
+        LOGGER.info("RequestURI: " + requestURI);
+        LOGGER.info("ContextPath: " + request.getContextPath());
+        LOGGER.info("ServletPath: " + request.getServletPath());
+        LOGGER.info("QueryString: " + request.getQueryString());
+
+        HttpSession session = request.getSession(false);
+        LOGGER.info("Session exists: " + (session != null));
+        if (session != null) {
+            LOGGER.info("Session ID: " + session.getId());
+            LOGGER.info("User in session: " + (session.getAttribute("user") != null));
+        }
+
+        String contextPath = request.getContextPath();
+
+        boolean isLoginPage = requestURI.equals(contextPath + "/login")
+                || requestURI.equals(contextPath + "/login/")
+                || requestURI.endsWith("/login.jsp");
+
+        boolean isPublicResource = requestURI.startsWith(contextPath + "/public/")
+                || requestURI.startsWith(contextPath + "/assets/")
+                || requestURI.startsWith(contextPath + "/resources/")
+                || requestURI.endsWith(".css")
+                || requestURI.endsWith(".js")
+                || requestURI.endsWith(".png")
+                || requestURI.endsWith(".jpg")
+                || requestURI.endsWith(".ico");
+
+        boolean isRoot = requestURI.equals(contextPath + "/")
+                || requestURI.equals(contextPath);
 
         boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
 
-        if (isLoggedIn || isLoginPage || isPublicRessource || isRoot){
-            chain.doFilter(request , response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/login");
-        }
-    }
+        LOGGER.info("isLoginPage: " + isLoginPage);
+        LOGGER.info("isPublicResource: " + isPublicResource);
+        LOGGER.info("isRoot: " + isRoot);
+        LOGGER.info("isLoggedIn: " + isLoggedIn);
 
-    @Override
-    public void destroy() {
-        Filter.super.destroy();
+        if (isLoggedIn || isLoginPage || isPublicResource || isRoot) {
+            LOGGER.info("Allowing request through");
+            chain.doFilter(request, response);
+            LOGGER.info("=== FILTER END (passed through) ===");
+        } else {
+            LOGGER.info("Redirecting to login");
+            response.sendRedirect(contextPath + "/login");
+            LOGGER.info("=== FILTER END (redirected) ===");
+        }
     }
 }

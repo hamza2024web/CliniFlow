@@ -1,4 +1,4 @@
-package com.clinique.webapp.servlet;
+package com.clinique.webapp.servlet.staff;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
