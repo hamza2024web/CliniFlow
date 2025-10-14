@@ -12,6 +12,7 @@ import java.util.List;
 
 @WebServlet("/admin/specialties")
 public class SpecialtyListServlet extends HttpServlet {
+
     @Inject
     private SpecialtyService specialtyService;
 

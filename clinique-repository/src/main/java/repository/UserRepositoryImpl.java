@@ -1,4 +1,4 @@
-package repository.impl;
+package repository;
 
 import com.clinique.domain.User;
 import jakarta.enterprise.context.ApplicationScoped;

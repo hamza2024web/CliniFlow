@@ -2,7 +2,9 @@ package service;
 
 import com.clinique.domain.Department;
 import com.clinique.domain.Specialty;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 import repository.Interface.DepartmentRepository;
 import repository.Interface.SpecialityRepository;
@@ -10,6 +12,8 @@ import service.Interface.SpecialtyService;
 
 import java.util.List;
 
+@ApplicationScoped
+@Named
 public class SpecialtyServiceImpl implements SpecialtyService {
 
     @Inject

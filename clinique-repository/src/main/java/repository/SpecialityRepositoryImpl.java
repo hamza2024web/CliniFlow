@@ -2,6 +2,8 @@ package repository;
 
 import com.clinique.domain.Department;
 import com.clinique.domain.Specialty;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import repository.Interface.SpecialityRepository;
@@ -9,6 +11,8 @@ import repository.Interface.SpecialityRepository;
 import java.util.List;
 import java.util.Optional;
 
+@ApplicationScoped
+@Named
 public class SpecialityRepositoryImpl implements SpecialityRepository {
 
     @PersistenceContext

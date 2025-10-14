@@ -324,13 +324,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/admin/departments" class="nav-link">
                     <span class="nav-icon">🏥</span>
                     Départements
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/admin/specialties" class="nav-link">
                     <span class="nav-icon">🎓</span>
                     Spécialités
                 </a>
@@ -399,7 +399,7 @@
                         <select id="role" name="role" required>
                             <option value="">-- Sélectionner un rôle --</option>
                             <option value="ADMIN" <%= "ADMIN".equals(user.getRole()) ? "selected" : "" %>>👑 Administrateur</option>
-                            <option value="MEDECIN" <%= "MEDECIN".equals(user.getRole()) ? "selected" : "" %>>👨‍⚕️ Médecin</option>
+                            <option value="DOCTOR" <%= "DOCTOR".equals(user.getRole()) ? "selected" : "" %>>👨‍⚕️ Médecin</option>
                             <option value="STAFF" <%= "STAFF".equals(user.getRole()) ? "selected" : "" %>>👔 Personnelle</option>
                             <option value="PATIENT" <%= "PATIENT".equals(user.getRole()) ? "selected" : "" %>>🧑 Patient</option>
                         </select>

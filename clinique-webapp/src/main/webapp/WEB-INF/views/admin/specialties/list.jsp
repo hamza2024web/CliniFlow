@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.clinique.domain.Department" %>
+<%@ page import="com.clinique.domain.Specialty" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Départements</title>
+    <title>Gestion des Spécialités</title>
     <style>
         * {
             margin: 0;
@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 260px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
@@ -97,15 +96,12 @@
             text-decoration: none;
             border-radius: 8px;
             transition: background 0.3s;
-            border: none;
-            cursor: pointer;
         }
 
         .logout-btn:hover {
             background: #c53030;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -146,8 +142,6 @@
             gap: 8px;
             font-weight: 500;
             transition: transform 0.3s, box-shadow 0.3s;
-            border: none;
-            cursor: pointer;
         }
 
         .btn-primary:hover {
@@ -155,7 +149,6 @@
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
-        /* Table Container */
         .table-container {
             background: white;
             border-radius: 12px;
@@ -240,7 +233,11 @@
             color: #3182ce;
         }
 
-        /* Action Buttons */
+        .badge-department {
+            background: #f0fff4;
+            color: #38a169;
+        }
+
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -331,7 +328,6 @@
 </head>
 <body>
 <div class="dashboard-container">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>Clinique Digitale</h2>
@@ -352,13 +348,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/departments" class="nav-link active">
+                <a href="<%=request.getContextPath()%>/admin/departments" class="nav-link">
                     <span class="nav-icon">🏥</span>
                     Départements
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/specialties" class="nav-link">
+                <a href="<%=request.getContextPath()%>/admin/specialties" class="nav-link active">
                     <span class="nav-icon">🎓</span>
                     Spécialités
                 </a>
@@ -380,21 +376,20 @@
         <a href="<%=request.getContextPath()%>/logout" class="logout-btn">Se déconnecter</a>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="page-header">
             <h1>
-                <span class="icon">🏥</span>
-                Gestion des Départements
+                <span class="icon">🎓</span>
+                Gestion des Spécialités
             </h1>
-            <a href="<%=request.getContextPath()%>/admin/departments/create" class="btn-primary">
-                ➕ Créer un département
+            <a href="<%=request.getContextPath()%>/admin/specialties/create" class="btn-primary">
+                ➕ Créer une spécialité
             </a>
         </div>
 
         <div class="table-container">
             <div class="table-header">
-                <h2>Liste des départements</h2>
+                <h2>Liste des spécialités</h2>
                 <div class="search-box">
                     <span>🔍</span>
                     <input type="text" placeholder="Rechercher..." id="searchInput">
@@ -402,32 +397,40 @@
             </div>
 
             <%
-                List<Department> departments = (List<Department>) request.getAttribute("departments");
-                if (departments != null && !departments.isEmpty()) {
+                List<Specialty> specialties = (List<Specialty>) request.getAttribute("specialties");
+                if (specialties != null && !specialties.isEmpty()) {
             %>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nom du département</th>
+                    <th>Nom de la spécialité</th>
                     <th>Code</th>
+                    <th>Département</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <%
-                    for (Department d : departments) {
+                    for (Specialty s : specialties) {
                 %>
                 <tr>
-                    <td><strong>#<%= d.getId() %></strong></td>
-                    <td><%= d.getName() %></td>
-                    <td><span class="badge badge-code"><%= d.getCode() %></span></td>
+                    <td><strong>#<%= s.getId() %></strong></td>
+                    <td><%= s.getName() %></td>
+                    <td><span class="badge badge-code"><%= s.getCode() %></span></td>
+                    <td>
+                        <% if(s.getDepartment() != null) { %>
+                        <span class="badge badge-department"><%= s.getDepartment().getName() %></span>
+                        <% } else { %>
+                        <span style="color: #a0aec0;">Non assigné</span>
+                        <% } %>
+                    </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="<%=request.getContextPath()%>/admin/departments/edit?id=<%= d.getId() %>" class="btn-edit">✏️ Modifier</a>
-                            <form action="<%=request.getContextPath()%>/admin/departments/delete" method="post" style="display:inline;">
-                                <input type="hidden" name="id" value="<%=d.getId()%>"/>
-                                <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce département ?');">🗑️ Supprimer</button>
+                            <a href="<%=request.getContextPath()%>/admin/specialties/edit?id=<%= s.getId() %>" class="btn-edit">✏️ Modifier</a>
+                            <form action="<%=request.getContextPath()%>/admin/specialties/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="<%=s.getId()%>"/>
+                                <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette spécialité ?');">🗑️ Supprimer</button>
                             </form>
                         </div>
                     </td>
@@ -439,9 +442,9 @@
             } else {
             %>
             <div class="empty-state">
-                <div class="icon">🏥</div>
-                <h3>Aucun département trouvé</h3>
-                <p>Commencez par créer votre premier département</p>
+                <div class="icon">🎓</div>
+                <h3>Aucune spécialité trouvée</h3>
+                <p>Commencez par créer votre première spécialité</p>
             </div>
             <%
                 }

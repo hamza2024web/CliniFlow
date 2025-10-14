@@ -359,13 +359,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/admin/departments" class="nav-link">
                     <span class="nav-icon">🏥</span>
                     Départements
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/admin/specialties" class="nav-link">
                     <span class="nav-icon">🎓</span>
                     Spécialités
                 </a>

@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.clinique.domain.Department" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un Département</title>
+    <title>Créer une Spécialité</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 260px;
             background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
@@ -101,7 +102,6 @@
             background: #c53030;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -141,7 +141,6 @@
             text-decoration: underline;
         }
 
-        /* Form Container */
         .form-container {
             background: white;
             border-radius: 12px;
@@ -190,6 +189,7 @@
             font-size: 15px;
             transition: all 0.3s;
             font-family: inherit;
+            background: white;
         }
 
         .form-control:focus {
@@ -200,6 +200,15 @@
 
         .form-control::placeholder {
             color: #a0aec0;
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
         .form-help {
@@ -274,7 +283,6 @@
 </head>
 <body>
 <div class="dashboard-container">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>Clinique Digitale</h2>
@@ -295,13 +303,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/departments" class="nav-link active">
+                <a href="<%=request.getContextPath()%>/admin/departments" class="nav-link">
                     <span class="nav-icon">🏥</span>
                     Départements
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/admin/specialties" class="nav-link">
+                <a href="<%=request.getContextPath()%>/admin/specialties" class="nav-link active">
                     <span class="nav-icon">🎓</span>
                     Spécialités
                 </a>
@@ -323,17 +331,16 @@
         <a href="<%=request.getContextPath()%>/logout" class="logout-btn">Se déconnecter</a>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="page-header">
             <h1>
                 <span>➕</span>
-                Créer un nouveau département
+                Créer une nouvelle spécialité
             </h1>
             <div class="breadcrumb">
                 <a href="<%=request.getContextPath()%>/admin/dashboard">Accueil</a>
                 <span>/</span>
-                <a href="<%=request.getContextPath()%>/admin/departments">Départements</a>
+                <a href="<%=request.getContextPath()%>/admin/specialties">Spécialités</a>
                 <span>/</span>
                 <span>Créer</span>
             </div>
@@ -351,18 +358,18 @@
             <form method="post">
                 <div class="form-group">
                     <label for="name">
-                        Nom du département <span class="required">*</span>
+                        Nom de la spécialité <span class="required">*</span>
                     </label>
                     <input
                             type="text"
                             class="form-control"
                             id="name"
                             name="name"
-                            placeholder="Ex: Cardiologie, Pédiatrie..."
+                            placeholder="Ex: Chirurgie cardiovasculaire, Neurologie..."
                             required
                             autofocus
                     />
-                    <div class="form-help">Entrez le nom complet du département</div>
+                    <div class="form-help">Entrez le nom complet de la spécialité</div>
                 </div>
 
                 <div class="form-group">
@@ -374,18 +381,38 @@
                             class="form-control"
                             id="code"
                             name="code"
-                            placeholder="Ex: CARD, PED..."
+                            placeholder="Ex: CHIR-CV, NEUR..."
                             required
                             maxlength="10"
                     />
-                    <div class="form-help">Code unique pour identifier le département (max 10 caractères)</div>
+                    <div class="form-help">Code unique pour identifier la spécialité (max 10 caractères)</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="departmentId">
+                        Département <span class="required">*</span>
+                    </label>
+                    <select class="form-control" id="departmentId" name="departmentId" required>
+                        <option value="">Sélectionnez un département...</option>
+                        <%
+                            List<Department> departments = (List<Department>) request.getAttribute("departments");
+                            if(departments != null) {
+                                for (Department d : departments) {
+                        %>
+                        <option value="<%=d.getId()%>"><%=d.getName()%> (<%=d.getCode()%>)</option>
+                        <%
+                                }
+                            }
+                        %>
+                    </select>
+                    <div class="form-help">Sélectionnez le département auquel appartient cette spécialité</div>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        ✓ Créer le département
+                        ✓ Créer la spécialité
                     </button>
-                    <a href="<%=request.getContextPath()%>/admin/departments" class="btn btn-secondary">
+                    <a href="<%=request.getContextPath()%>/admin/specialties" class="btn btn-secondary">
                         ✕ Annuler
                     </a>
                 </div>
