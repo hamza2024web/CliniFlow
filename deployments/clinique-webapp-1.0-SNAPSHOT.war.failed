@@ -1,0 +1,41 @@
+"{\"WFLYCTL0080: Failed services\" => {\"jboss.deployment.unit.\\\"clinique-webapp-1.0-SNAPSHOT.war\\\".WeldStartService\" => \"Failed to start service
+    Caused by: org.jboss.weld.exceptions.DeploymentException: Exception List with 2 exceptions:
+Exception 0 :
+org.jboss.weld.exceptions.DeploymentException: WELD-001408: Unsatisfied dependencies for type EntityManager with qualifiers @Default
+  at injection point [BackedAnnotatedField] @Inject private service.DoctorServiceImpl.em
+  at service.DoctorServiceImpl.em(DoctorServiceImpl.java:0)
+
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateInjectionPointForDeploymentProblems(Validator.java:367)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:285)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateGeneralBean(Validator.java:141)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateRIBean(Validator.java:162)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateBean(Validator.java:515)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:64)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:62)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:62)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:55)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.JBossThread.run(JBossThread.java:513)
+Exception 1 :
+org.jboss.weld.exceptions.DeploymentException: WELD-001408: Unsatisfied dependencies for type EntityManager with qualifiers @Default
+  at injection point [BackedAnnotatedField] @Inject private service.PatientServiceImpl.em
+  at service.PatientServiceImpl.em(PatientServiceImpl.java:0)
+
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateInjectionPointForDeploymentProblems(Validator.java:367)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateInjectionPoint(Validator.java:285)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateGeneralBean(Validator.java:141)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateRIBean(Validator.java:162)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.Validator.validateBean(Validator.java:515)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:64)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.bootstrap.ConcurrentValidator$1.doWork(ConcurrentValidator.java:62)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:62)
+	at org.jboss.weld.core@5.1.0.Final//org.jboss.weld.executor.IterativeWorkerTaskFactory$1.call(IterativeWorkerTaskFactory.java:55)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	at org.jboss.threads@2.4.0.Final//org.jboss.threads.JBossThread.run(JBossThread.java:513)
+\"}}"
