@@ -19,7 +19,7 @@ public class PatientRepositoryImpl implements PatientRepository {
     @Override
     public Patient save(Patient patient) {
         if (patient.getId() == null) {
-            entityManager.persist(patient);
+            entityManager.merge(patient);
             entityManager.flush();
         } else {
             patient = entityManager.merge(patient);

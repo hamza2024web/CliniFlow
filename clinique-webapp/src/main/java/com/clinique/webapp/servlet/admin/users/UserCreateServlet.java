@@ -102,8 +102,7 @@ public class UserCreateServlet extends HttpServlet {
             request.setAttribute("error", "Erreur inattendue. Veuillez réessayer.");
             preserveFormData(request);
             loadFormData(request);
-            request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp")
-                    .forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/admin/users/create.jsp").forward(request, response);
         }
     }
 

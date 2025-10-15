@@ -19,7 +19,7 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     @Override
     public Doctor save(Doctor doctor) {
         if (doctor.getId() == null) {
-            entityManager.persist(doctor);
+            entityManager.merge(doctor);
             entityManager.flush();
         } else {
             doctor = entityManager.merge(doctor);
