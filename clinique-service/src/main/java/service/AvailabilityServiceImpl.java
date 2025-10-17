@@ -66,7 +66,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 
     @Override
     public List<Availability> getAvailabilitiesByDoctor(Doctor doctor) {
-        return availabilityRepository.findActiveByDoctor(doctor);
+        return availabilityRepository.findAvailabilityByDoctor(doctor);
     }
 
     private void validateTimes(LocalTime startTime , LocalTime endTime){

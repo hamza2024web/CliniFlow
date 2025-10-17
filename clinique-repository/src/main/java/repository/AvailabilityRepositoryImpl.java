@@ -56,8 +56,8 @@ public class AvailabilityRepositoryImpl implements AvailabilityRepository {
         }
     }
 
-    public List<Availability> findActiveByDoctor(Doctor doctor) {
-        return em.createQuery("SELECT a FROM Availability a WHERE a.doctor = :doctor AND a.active = true", Availability.class)
+    public List<Availability> findAvailabilityByDoctor(Doctor doctor) {
+        return em.createQuery("SELECT a FROM Availability a WHERE a.doctor = :doctor", Availability.class)
                 .setParameter("doctor", doctor)
                 .getResultList();
     }

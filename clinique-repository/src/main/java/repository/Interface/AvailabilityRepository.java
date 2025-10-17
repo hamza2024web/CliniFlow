@@ -14,5 +14,5 @@ public interface AvailabilityRepository {
     List<Availability> findByDoctor(Doctor doctor);
     Optional<Availability> findByDoctorAndDay(Doctor doctor , DayOfWeek dayOfWeek);
     void delete(Long id);
-    List<Availability> findActiveByDoctor(Doctor doctor);
+    List<Availability> findAvailabilityByDoctor(Doctor doctor);
 }
