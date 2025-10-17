@@ -22,66 +22,17 @@ public class SetupServlet extends HttpServlet {
         if (!userService.emailExists("admin@clinique.com")) {
             System.out.println("Création de l'utilisateur ADMIN...");
             userService.createUser(
-                    "Admin Clinique",
-                    "said",
-                    "admin@clinique.com",
-                    "admin123",
+                    "hamza",
+                    "akroubi",
+                    "hamzaAkroubi@clinique.com",
+                    "hamza@2006",
                     Role.valueOf("ADMIN")
             );
             System.out.println("✓ ADMIN créé avec succès !");
-            System.out.println("  Email: admin@clinique.com");
+            System.out.println("  Email: hamzaAkroubi@clinique.com");
             System.out.println("  Mot de passe: admin123");
         } else {
             System.out.println("⚠ L'utilisateur admin@clinique.com existe déjà.");
-        }
-
-        // Création de l'utilisateur DOCTOR
-        if (!userService.emailExists("doctor@clinique.com")) {
-            System.out.println("Création de l'utilisateur DOCTOR...");
-            userService.createUser(
-                    "Dr. Hamza Akroupi",
-                    "hamza",
-                    "doctor@clinique.com",
-                    "doctor123",
-                    Role.valueOf("DOCTOR")
-            );
-            System.out.println("✓ DOCTOR créé avec succès !");
-            System.out.println("  Email: doctor@clinique.com");
-            System.out.println("  Mot de passe: doctor123");
-        } else {
-            System.out.println("⚠ L'utilisateur doctor@clinique.com existe déjà.");
-        }
-
-        if (!userService.emailExists("patient@clinique.com")) {
-            System.out.println("Création de l'utilisateur PATIENT...");
-            userService.createUser(
-                    "Patient Test",
-                    "anwar",
-                    "patient@clinique.com",
-                    "patient123",
-                    Role.valueOf("PATIENT")
-            );
-            System.out.println("✓ PATIENT créé avec succès !");
-            System.out.println("  Email: patient@clinique.com");
-            System.out.println("  Mot de passe: patient123");
-        } else {
-            System.out.println("⚠ L'utilisateur patient@clinique.com existe déjà.");
-        }
-
-        if (!userService.emailExists("staff@clinique.com")) {
-            System.out.println("Création de l'utilisateur STAFF...");
-            userService.createUser(
-                    "Staff Réception",
-                    "zakaria",
-                    "staff@clinique.com",
-                    "staff123",
-                    Role.valueOf("STAFF")
-            );
-            System.out.println("✓ STAFF créé avec succès !");
-            System.out.println("  Email: staff@clinique.com");
-            System.out.println("  Mot de passe: staff123");
-        } else {
-            System.out.println("⚠ L'utilisateur staff@clinique.com existe déjà.");
         }
 
         System.out.println("========================================");

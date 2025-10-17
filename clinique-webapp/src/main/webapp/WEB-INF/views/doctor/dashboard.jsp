@@ -314,7 +314,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/doctor/availabilities" class="nav-link">
                     <span class="nav-icon">🕒</span>
                     Mes disponibilités
                 </a>

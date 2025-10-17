@@ -43,6 +43,13 @@ public class Availability {
         this.doctor = doctor;
     }
 
+    public Availability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Doctor doctor) {
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.doctor = doctor;
+    }
+
     public Long getId() {
         return id;
     }
