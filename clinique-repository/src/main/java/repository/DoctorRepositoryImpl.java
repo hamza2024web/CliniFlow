@@ -76,10 +76,10 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public List<Doctor> findBySpeciality(String speciality) {
-        String jpql = "SELECT d FROM Doctor d WHERE d.specialty.name = :specialty";
+    public List<Doctor> findBySpecialityId(Long specialtyId) {
+        String jpql = "SELECT d FROM Doctor d WHERE d.specialty.id = :specialtyId";
         TypedQuery<Doctor> query = entityManager.createQuery(jpql, Doctor.class);
-        query.setParameter("specialty", speciality);
+        query.setParameter("specialtyId", specialtyId);
         return query.getResultList();
     }
 }

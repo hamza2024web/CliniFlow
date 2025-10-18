@@ -100,8 +100,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Doctor> getDoctorsBySpeciality(String speciality) {
-        return doctorRepository.findBySpeciality(speciality);
+    public List<Doctor> getDoctorsBySpeciality(Long specialtyId) {
+        return doctorRepository.findBySpecialityId(specialtyId);
     }
 
     private int getDurationByType(AppointmentType type){
