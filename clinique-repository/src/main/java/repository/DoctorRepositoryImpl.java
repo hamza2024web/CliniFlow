@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import repository.Interface.DoctorRepository;
 
 import java.util.List;
@@ -72,5 +73,13 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Doctor> findBySpeciality(String speciality) {
+        String jpql = "SELECT d FROM Doctor d WHERE d.specialty.name = :specialty";
+        TypedQuery<Doctor> query = entityManager.createQuery(jpql, Doctor.class);
+        query.setParameter("specialty", speciality);
+        return query.getResultList();
     }
 }

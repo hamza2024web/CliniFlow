@@ -12,4 +12,5 @@ public interface DoctorRepository {
     List<Doctor> findAll();
     Optional<Doctor> findByUserId(Long userId);
     Optional<Doctor> findByRegistrationNumber(String registrationNumber);
+    List<Doctor> findBySpeciality(String speciality);
 }

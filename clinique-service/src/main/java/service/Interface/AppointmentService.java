@@ -18,4 +18,5 @@ public interface AppointmentService {
     boolean isSlotAvailable(Doctor doctor, LocalDateTime start, LocalDateTime end);
     List<Appointment> getAppointmentsByPatient(Patient patient);
     List<Appointment> getAppointmentsByDoctorAndDate(Doctor doctor, LocalDate date);
+    List<Doctor> getDoctorsBySpeciality(String speciality);
 }

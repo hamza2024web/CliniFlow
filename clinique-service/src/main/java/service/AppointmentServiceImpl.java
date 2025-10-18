@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import repository.Interface.AppointmentRepository;
 import repository.Interface.AvailabilityRepository;
+import repository.Interface.DoctorRepository;
 import repository.Interface.WaitingListRepository;
 import service.Interface.AppointmentService;
 
@@ -30,6 +31,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Inject
     private WaitingListRepository waitingListRepository;
+
+    @Inject
+    private DoctorRepository doctorRepository;
 
     @Override
     public List<TimeSlot> getAvailableSlots(Doctor doctor, LocalDate date, AppointmentType type) {
@@ -93,6 +97,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         LocalDateTime dayStart = date.atStartOfDay();
         LocalDateTime dayEnd = date.atTime(LocalTime.MAX);
         return appointmentRepository.findByDoctorAndDate(doctor,dayStart,dayEnd);
+    }
+
+    @Override
+    public List<Doctor> getDoctorsBySpeciality(String speciality) {
+        return doctorRepository.findBySpeciality(speciality);
     }
 
     private int getDurationByType(AppointmentType type){
