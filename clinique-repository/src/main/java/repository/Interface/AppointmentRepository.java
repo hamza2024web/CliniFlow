@@ -18,4 +18,5 @@ public interface AppointmentRepository {
     void delete(Appointment appointment);
     List<Appointment> findByDoctorAndType(Doctor doctor , String type);
     Optional<Appointment> findByIdWithRelations(Long id);
+    List<Appointment> findByDoctorId(Long doctorId);
 }

@@ -111,6 +111,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         return doctorRepository.findBySpecialityId(specialtyId);
     }
 
+    @Override
+    public List<Appointment> getAppointmentsByDoctor(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+
     private int getDurationByType(AppointmentType type){
         switch (type) {
             case CONSULTATION: return 30;

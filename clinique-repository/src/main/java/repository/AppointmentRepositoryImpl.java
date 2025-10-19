@@ -51,6 +51,14 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
 
     @Override
+    public List<Appointment> findByDoctorId(Long doctorId) {
+        String jpql = "SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId ORDER BY a.startDatetime";
+        TypedQuery<Appointment> query = entityManager.createQuery(jpql, Appointment.class);
+        query.setParameter("doctorId", doctorId);
+        return query.getResultList();
+    }
+
+    @Override
     public Optional<Appointment> findById(Long id) {
         Appointment appointment = entityManager.find(Appointment.class, id);
         return Optional.ofNullable(appointment);
