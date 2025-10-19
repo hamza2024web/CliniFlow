@@ -320,9 +320,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/patient/medical_note" class="nav-link">
                     <span class="nav-icon">📖</span>
-                    Historique médical
+                    les notes médicals
                 </a>
             </li>
             <li class="nav-item">

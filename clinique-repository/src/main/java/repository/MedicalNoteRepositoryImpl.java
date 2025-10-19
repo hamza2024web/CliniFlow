@@ -38,7 +38,10 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @Override
     public List<MedicalNote> findByPatientId(Long patientId) {
-        String jpql = "SELECT n FROM MedicalNote n WHERE n.patient.id = :patientId";
+        String jpql = "SELECT n FROM MedicalNote n " +
+                "JOIN FETCH n.patient p " +
+                "JOIN FETCH p.user " +
+                "WHERE p.id = :patientId";
         TypedQuery<MedicalNote> query = entityManager.createQuery(jpql, MedicalNote.class);
         query.setParameter("patientId", patientId);
         return query.getResultList();
@@ -46,7 +49,10 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @Override
     public List<MedicalNote> findByDoctorId(Long doctorId) {
-        String jpql = "SELECT n FROM MedicalNote n WHERE n.doctor.id = :doctorId";
+        String jpql = "SELECT n FROM MedicalNote n " +
+                "JOIN FETCH n.doctor d " +
+                "JOIN FETCH d.user " +
+                "WHERE d.id = :doctorId";
         TypedQuery<MedicalNote> query = entityManager.createQuery(jpql, MedicalNote.class);
         query.setParameter("doctorId", doctorId);
         return query.getResultList();
