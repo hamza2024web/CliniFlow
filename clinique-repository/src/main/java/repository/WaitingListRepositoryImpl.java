@@ -11,6 +11,7 @@ public class WaitingListRepositoryImpl implements WaitingListRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
     @Override
     public WaitingListEntry save(WaitingListEntry waitinglist) {
         if (waitinglist.getId() == null ){

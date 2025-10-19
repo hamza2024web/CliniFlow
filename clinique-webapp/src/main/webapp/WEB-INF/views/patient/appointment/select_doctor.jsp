@@ -248,7 +248,7 @@
                                             ${doctor.nom.substring(0,1).toUpperCase()}
                                     </div>
                                     <div class="doctor-info">
-                                        <h3>Dr. ${doctor.nom} ${doctor.prenom}</h3>
+                                        <h3>Dr. ${doctor.last_name} ${doctor.first_name}</h3>
                                         <p>${specialty.name}</p>
                                     </div>
                                 </label>

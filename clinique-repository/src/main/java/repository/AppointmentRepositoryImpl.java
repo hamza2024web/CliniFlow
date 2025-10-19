@@ -5,6 +5,7 @@ import com.clinique.domain.Doctor;
 import com.clinique.domain.Patient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import repository.Interface.AppointmentRepository;
@@ -20,12 +21,32 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     private EntityManager entityManager;
 
     @Override
-    public Appointment save(Appointment appointement) {
-        if (appointement.getId() == null){
-            entityManager.persist(appointement);
-            return appointement;
+    public Appointment save(Appointment appointment) {
+        if (appointment.getId() == null) {
+            entityManager.persist(appointment);
+            entityManager.flush();
+            return findByIdWithRelations(appointment.getId()).orElse(appointment);
         } else {
-            return entityManager.merge(appointement);
+            return entityManager.merge(appointment);
+        }
+    }
+
+    public Optional<Appointment> findByIdWithRelations(Long id) {
+        try {
+            Appointment appointment = entityManager.createQuery(
+                            "SELECT a FROM Appointment a " +
+                                    "JOIN FETCH a.patient p " +
+                                    "JOIN FETCH p.user " +
+                                    "JOIN FETCH a.doctor d " +
+                                    "JOIN FETCH d.user " +
+                                    "WHERE a.id = :id",
+                            Appointment.class
+                    )
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return Optional.of(appointment);
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 

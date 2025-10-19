@@ -13,13 +13,13 @@ import java.util.Optional;
 
 @ApplicationScoped
 @Named
+@Transactional
 public class DoctorServiceImpl implements DoctorService {
 
     @Inject
     private DoctorRepository doctorRepository;
 
     @Override
-    @Transactional
     public Doctor save(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
@@ -35,7 +35,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         doctor.ifPresent(doctorRepository::delete);

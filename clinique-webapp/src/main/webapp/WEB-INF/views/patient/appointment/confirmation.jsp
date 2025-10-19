@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -247,7 +248,9 @@
                     <div class="detail-icon">👨‍⚕️</div>
                     <div class="detail-content">
                         <div class="detail-label">Médecin</div>
-                        <div class="detail-value">Dr. ${appointment.doctor.nom} ${appointment.doctor.prenom}</div>
+                        <div class="detail-value">
+                            Dr. ${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}
+                        </div>
                     </div>
                 </div>
 
@@ -255,7 +258,9 @@
                     <div class="detail-icon">📅</div>
                     <div class="detail-content">
                         <div class="detail-label">Date</div>
-                        <div class="detail-value">${appointment.date}</div>
+                        <div class="detail-value">
+                            <fmt:formatDate value="${appointment.appointmentDateTime}" pattern="dd/MM/yyyy" />
+                        </div>
                     </div>
                 </div>
 
@@ -263,7 +268,9 @@
                     <div class="detail-icon">⏰</div>
                     <div class="detail-content">
                         <div class="detail-label">Heure de début</div>
-                        <div class="detail-value">${appointment.startTime}</div>
+                        <div class="detail-value">
+                            <fmt:formatDate value="${appointment.appointmentDateTime}" pattern="HH:mm" />
+                        </div>
                     </div>
                 </div>
 
@@ -273,10 +280,10 @@
                         <div class="detail-label">Type de consultation</div>
                         <div class="detail-value">
                             <c:choose>
-                                <c:when test="${appointment.type == 'CONSULTATION'}">Consultation standard</c:when>
-                                <c:when test="${appointment.type == 'SPECIALIZED'}">Consultation spécialisée</c:when>
-                                <c:when test="${appointment.type == 'EMERGENCY'}">Urgence</c:when>
-                                <c:otherwise>${appointment.type}</c:otherwise>
+                                <c:when test="${appointment.appointmentType == 'CONSULTATION'}">Consultation standard</c:when>
+                                <c:when test="${appointment.appointmentType == 'SPECIALIZED'}">Consultation spécialisée</c:when>
+                                <c:when test="${appointment.appointmentType == 'EMERGENCY'}">Urgence</c:when>
+                                <c:otherwise>${appointment.appointmentType}</c:otherwise>
                             </c:choose>
                         </div>
                     </div>
@@ -309,7 +316,7 @@
                 <p>Nous sommes désolés, une erreur s'est produite lors de la réservation de votre rendez-vous. Veuillez réessayer ou contacter notre service client si le problème persiste.</p>
                 <div class="btn-container">
                     <a href="${pageContext.request.contextPath}/patient/appointment/book-appointment" class="btn btn-primary">🔄 Réessayer</a>
-                    <a href="${pageContext.request.contextPath}/dashboard/patient" class="btn btn-secondary">🏠 Retour à l'accueil</a>
+                    <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-secondary">🏠 Retour à l'accueil</a>
                 </div>
             </div>
         </c:otherwise>

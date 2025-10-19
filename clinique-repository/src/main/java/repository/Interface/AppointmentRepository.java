@@ -17,4 +17,5 @@ public interface AppointmentRepository {
     boolean existsByDoctorAndTime(Doctor doctor, LocalDateTime start , LocalDateTime end);
     void delete(Appointment appointment);
     List<Appointment> findByDoctorAndType(Doctor doctor , String type);
+    Optional<Appointment> findByIdWithRelations(Long id);
 }

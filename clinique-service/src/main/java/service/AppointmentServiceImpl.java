@@ -6,6 +6,7 @@ import com.clinique.domain.Enum.AppointmentType;
 import com.clinique.domain.Enum.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import repository.Interface.AppointmentRepository;
 import repository.Interface.AvailabilityRepository;
 import repository.Interface.DoctorRepository;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class AppointmentServiceImpl implements AppointmentService {
 
     @Inject
@@ -70,13 +72,18 @@ public class AppointmentServiceImpl implements AppointmentService {
         int duration = getDurationByType(type);
         LocalDateTime end = start.plusMinutes(duration);
 
-        if (isSlotAvailable(doctor,start,end)){
-            Appointment appointment = new Appointment(start,end,patient,doctor);
+        if (isSlotAvailable(doctor, start, end)) {
+            Appointment appointment = new Appointment(start, end, patient, doctor);
             appointment.setAppointmentType(type);
             appointment.setStatus(AppointmentStatus.SCHEDULED);
-            return Optional.of(appointmentRepository.save(appointment));
+
+            Appointment saved = appointmentRepository.save(appointment);
+
+            return appointmentRepository.findByIdWithRelations(saved.getId());
         } else {
-            WaitingListEntry entry = new WaitingListEntry(start.toLocalDate(), priority, patient , doctor);
+            WaitingListEntry entry = new WaitingListEntry(
+                    start.toLocalDate(), priority, patient, doctor
+            );
             waitingListRepository.save(entry);
             return Optional.empty();
         }

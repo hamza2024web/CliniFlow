@@ -26,35 +26,66 @@ public class ReservationServlet extends HttpServlet {
     private PatientService patientService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String doctorIdStr = req.getParameter("doctorId");
-        String specialtyId = req.getParameter("specialtyId");
-        String dateStr = req.getParameter("date");
-        String appointmentTypeStr = req.getParameter("appointmentType");
-        String slotStartStr = req.getParameter("slotStart");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
-        Long doctorId = Long.parseLong(doctorIdStr);
-        Doctor doctor = doctorService.findById(doctorId).orElse(null);
-        LocalDate date = LocalDate.parse(dateStr);
-        LocalDateTime slotStart = LocalDateTime.parse(slotStartStr);
-        AppointmentType appointmentType = AppointmentType.valueOf(appointmentTypeStr);
+        // LOGS DE DEBUG
+        System.out.println("=== DEBUG START ===");
+        System.out.println("appointmentService: " + appointmentService);
+        System.out.println("doctorService: " + doctorService);
+        System.out.println("patientService: " + patientService);
 
-        User user = (User) req.getSession().getAttribute("user");
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
+        try {
+            User user = (User) req.getSession().getAttribute("user");
+            System.out.println("User from session: " + user);
+
+            if (user == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
+
+            String doctorIdStr = req.getParameter("doctorId");
+            System.out.println("doctorId parameter: " + doctorIdStr);
+
+            Long doctorId = Long.parseLong(doctorIdStr);
+            System.out.println("Searching for doctor with ID: " + doctorId);
+
+            Doctor doctor = doctorService.findById(doctorId).orElse(null);
+            System.out.println("Doctor found: " + doctor);
+
+            if (doctor == null) {
+                throw new IllegalArgumentException("Docteur introuvable");
+            }
+
+            LocalDate date = LocalDate.parse(req.getParameter("date"));
+            LocalDateTime slotStart = LocalDateTime.parse(req.getParameter("slotStart"));
+            AppointmentType appointmentType = AppointmentType.valueOf(req.getParameter("appointmentType"));
+
+            System.out.println("Searching for patient with ID: " + user.getId());
+            Patient patient = patientService.findByUserId(user.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Patient introuvable"));
+
+            System.out.println("Patient found: " + patient);
+
+            Priority priority = Priority.MEDIUM;
+
+            System.out.println("Creating appointment...");
+            Appointment appointment = appointmentService.createAppointment(
+                    patient, doctor, slotStart, appointmentType, priority
+            ).orElseThrow(() -> new RuntimeException("Échec création RDV"));
+
+            System.out.println("Appointment created: " + appointment);
+            System.out.println("=== DEBUG END ===");
+
+            req.setAttribute("appointment", appointment);
+            req.getRequestDispatcher("/WEB-INF/views/patient/appointment/confirmation.jsp")
+                    .forward(req, resp);
+
+        } catch (Exception e) {
+            System.err.println("=== ERROR ===");
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "Erreur: " + e.getMessage());
         }
-
-        Long id = user.getId();
-        Patient patient = patientService.findById(id).orElseThrow(() -> new IllegalArgumentException("Aucun Patient associé a cet utilisateur."));
-
-        // Ici, la priorité peut être fixée, ou choisie dans la JSP précédente
-        Priority priority = Priority.MEDIUM;
-
-        // Crée le rendez-vous ou ajoute à la waiting list
-        Appointment appointment = appointmentService.createAppointment(patient, doctor, slotStart, appointmentType, priority).orElse(null);
-
-        req.setAttribute("appointment", appointment);
-        req.getRequestDispatcher("/WEB-INF/views/patient/appointment/confirmation.jsp").forward(req, resp);
     }
 }

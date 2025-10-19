@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Transactional
 public class PatientServiceImpl implements PatientService {
 
     @Inject
@@ -33,7 +34,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         Optional<Patient> patient = patientRepository.findById(id);
         patient.ifPresent(patientRepository::delete);
