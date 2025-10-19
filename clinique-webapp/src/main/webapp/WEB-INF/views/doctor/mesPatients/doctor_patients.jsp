@@ -24,7 +24,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 260px;
             background: linear-gradient(180deg, #319795 0%, #2c7a7b 100%);
@@ -102,7 +101,6 @@
             background: #c53030;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -271,7 +269,6 @@
 </head>
 <body>
 <div class="dashboard-container">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>Clinique Digitale</h2>
@@ -280,25 +277,25 @@
 
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="<%= request.getContextPath() %>/doctor/dashboard" class="nav-link">
+                <a href="${pageContext.request.contextPath}/doctor/dashboard" class="nav-link">
                     <span class="nav-icon">📊</span>
                     Tableau de bord
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%= request.getContextPath() %>/doctor/agenda" class="nav-link">
+                <a href="${pageContext.request.contextPath}/doctor/agenda" class="nav-link">
                     <span class="nav-icon">📅</span>
                     Mon agenda
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%= request.getContextPath() %>/doctor/availabilities" class="nav-link">
+                <a href="${pageContext.request.contextPath}/doctor/availabilities" class="nav-link">
                     <span class="nav-icon">🕒</span>
                     Mes disponibilités
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<%= request.getContextPath() %>/doctor/mes_patients" class="nav-link active">
+                <a href="${pageContext.request.contextPath}/doctor/mes_patients" class="nav-link active">
                     <span class="nav-icon">👥</span>
                     Mes patients
                 </a>
@@ -314,7 +311,6 @@
         <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Se déconnecter</a>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="page-header">
             <h1>👥 Mes Patients</h1>
@@ -329,40 +325,104 @@
         </div>
 
         <div class="patients-container">
-            <div class="patient-header">
-                ${patients.size()} patient(s) au total
-            </div>
-
             <c:choose>
                 <c:when test="${not empty patients}">
+                    <div class="patient-header">
+                            ${patients.size()} patient(s) au total
+                    </div>
+
                     <div class="patients-grid" id="patientsGrid">
                         <c:forEach var="patient" items="${patients}">
-                            <div class="patient-card" data-patient='${patient.last_name} ${patient.first_name} ${patient.cin} ${patient.user.email} ${patient.phone_number}'>
-                                <div class="patient-avatar">${patient.nom.substring(0,1)}</div>
+                            <div class="patient-card"
+                                 data-patient='<c:out value="${patient.user.lastName} ${patient.user.firstName} ${patient.cin} ${patient.user.email} ${patient.phoneNumber}"/>'>
+                                <div class="patient-avatar">
+                                    <c:choose>
+                                        <c:when test="${not empty patient.user.lastName}">
+                                            ${patient.user.lastName.substring(0,1).toUpperCase()}
+                                        </c:when>
+                                        <c:otherwise>
+                                            ?
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                                 <div class="patient-info">
                                     <div class="info-group">
                                         <span class="info-label">Nom & Prénom</span>
-                                        <span class="info-value">${patient.last_name} ${patient.first_name}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.user}">
+                                                    ${patient.user.lastName} ${patient.user.firstName}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseigné
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">CIN</span>
-                                        <span class="info-value">${patient.cin}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.cin}">
+                                                    ${patient.cin}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseigné
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Email</span>
-                                        <span class="info-value">${patient.user.email}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.user.email}">
+                                                    ${patient.user.email}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseigné
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Téléphone</span>
-                                        <span class="info-value">${patient.user.phone_number}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.phoneNumber}">
+                                                    ${patient.phoneNumber}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseigné
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Date de naissance</span>
-                                        <span class="info-value">${patient.user.birth_day}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.user.birthDate}">
+                                                    ${patient.user.birthDate}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseignée
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Adresse</span>
-                                        <span class="info-value">${patient.adresse}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.address}">
+                                                    ${patient.address}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Non renseignée
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -381,22 +441,25 @@
 </div>
 
 <script>
-    // Fonction de recherche
     const searchInput = document.getElementById('searchInput');
     const patientCards = document.querySelectorAll('.patient-card');
 
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
+    if (searchInput && patientCards.length > 0) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
 
-        patientCards.forEach(card => {
-            const patientData = card.getAttribute('data-patient').toLowerCase();
-            if (patientData.includes(searchTerm)) {
-                card.style.display = 'grid';
-            } else {
-                card.style.display = 'none';
-            }
+            patientCards.forEach(card => {
+                const patientData = card.getAttribute('data-patient');
+                if (patientData) {
+                    if (patientData.toLowerCase().includes(searchTerm)) {
+                        card.style.display = 'grid';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
         });
-    });
+    }
 </script>
 </body>
 </html>
