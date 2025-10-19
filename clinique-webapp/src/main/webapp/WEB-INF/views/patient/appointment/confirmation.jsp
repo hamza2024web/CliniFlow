@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation du rendez-vous</title>
     <style>
+        /* Gardez tout votre CSS existant */
         * {
             margin: 0;
             padding: 0;
@@ -36,16 +36,6 @@
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
 
-        .error-header {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-            padding: 50px 30px;
-            border-radius: 12px;
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.3);
-        }
-
         .success-icon {
             font-size: 80px;
             margin-bottom: 20px;
@@ -53,25 +43,17 @@
         }
 
         @keyframes scaleIn {
-            0% {
-                transform: scale(0) rotate(-180deg);
-            }
-            50% {
-                transform: scale(1.2) rotate(10deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-            }
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
-        .success-header h2,
-        .error-header h2 {
+        .success-header h2 {
             font-size: 32px;
             margin-bottom: 10px;
         }
 
-        .success-header p,
-        .error-header p {
+        .success-header p {
             font-size: 16px;
             opacity: 0.95;
         }
@@ -146,16 +128,8 @@
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
-        }
-
-        .status-badge.confirmed {
             background: #c6f6d5;
             color: #22543d;
-        }
-
-        .status-badge.pending {
-            background: #feebc8;
-            color: #7c2d12;
         }
 
         .btn-container {
@@ -198,31 +172,13 @@
             border-color: #cbd5e0;
         }
 
-        .error-content {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-
-        .error-content p {
-            font-size: 16px;
-            color: #718096;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
         @media (max-width: 600px) {
-            .success-header,
-            .error-header {
+            .success-header {
                 padding: 40px 20px;
             }
-
             .details-card {
                 padding: 20px;
             }
-
             .btn-container {
                 flex-direction: column;
             }
@@ -231,96 +187,68 @@
 </head>
 <body>
 <div class="container">
-    <c:choose>
-        <c:when test="${not empty appointment}">
-            <div class="success-header">
-                <div class="success-icon">✓</div>
-                <h2>Rendez-vous confirmé !</h2>
-                <p>Votre rendez-vous a été réservé avec succès</p>
-            </div>
+    <c:if test="${not empty appointment}">
+        <div class="success-header">
+            <div class="success-icon">✓</div>
+            <h2>Rendez-vous confirmé !</h2>
+            <p>Votre rendez-vous a été réservé avec succès</p>
+        </div>
 
-            <div class="info-box">
-                <p>💡 <strong>Important :</strong> Un email de confirmation vous a été envoyé. Veuillez vous présenter 10 minutes avant l'heure du rendez-vous avec votre carte d'identité et vos documents médicaux.</p>
-            </div>
+        <div class="info-box">
+            <p>💡 <strong>Important :</strong> Un email de confirmation vous a été envoyé. Veuillez vous présenter 10 minutes avant l'heure du rendez-vous avec votre carte d'identité et vos documents médicaux.</p>
+        </div>
 
-            <div class="details-card">
-                <div class="detail-row">
-                    <div class="detail-icon">👨‍⚕️</div>
-                    <div class="detail-content">
-                        <div class="detail-label">Médecin</div>
-                        <div class="detail-value">
-                            Dr. ${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon">📅</div>
-                    <div class="detail-content">
-                        <div class="detail-label">Date</div>
-                        <div class="detail-value">
-                            <fmt:formatDate value="${appointment.appointmentDateTime}" pattern="dd/MM/yyyy" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon">⏰</div>
-                    <div class="detail-content">
-                        <div class="detail-label">Heure de début</div>
-                        <div class="detail-value">
-                            <fmt:formatDate value="${appointment.appointmentDateTime}" pattern="HH:mm" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon">🏥</div>
-                    <div class="detail-content">
-                        <div class="detail-label">Type de consultation</div>
-                        <div class="detail-value">
-                            <c:choose>
-                                <c:when test="${appointment.appointmentType == 'CONSULTATION'}">Consultation standard</c:when>
-                                <c:when test="${appointment.appointmentType == 'SPECIALIZED'}">Consultation spécialisée</c:when>
-                                <c:when test="${appointment.appointmentType == 'EMERGENCY'}">Urgence</c:when>
-                                <c:otherwise>${appointment.appointmentType}</c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon">📊</div>
-                    <div class="detail-content">
-                        <div class="detail-label">Statut</div>
-                        <div class="detail-value">
-                            <span class="status-badge confirmed">${appointment.status}</span>
-                        </div>
+        <div class="details-card">
+            <div class="detail-row">
+                <div class="detail-icon">👨‍⚕️</div>
+                <div class="detail-content">
+                    <div class="detail-label">Médecin</div>
+                    <div class="detail-value">
+                        Dr. ${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}
                     </div>
                 </div>
             </div>
 
-            <div class="btn-container">
-                <a href="${pageContext.request.contextPath}/patient/appointment/appointments" class="btn btn-secondary">📋 Mes rendez-vous</a>
-                <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-primary">🏠 Retour à l'accueil</a>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="error-header">
-                <div class="success-icon">✗</div>
-                <h2>Erreur de réservation</h2>
-                <p>Impossible de traiter votre demande</p>
-            </div>
-
-            <div class="error-content">
-                <p>Nous sommes désolés, une erreur s'est produite lors de la réservation de votre rendez-vous. Veuillez réessayer ou contacter notre service client si le problème persiste.</p>
-                <div class="btn-container">
-                    <a href="${pageContext.request.contextPath}/patient/appointment/book-appointment" class="btn btn-primary">🔄 Réessayer</a>
-                    <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-secondary">🏠 Retour à l'accueil</a>
+            <div class="detail-row">
+                <div class="detail-icon">📅</div>
+                <div class="detail-content">
+                    <div class="detail-label">Date</div>
+                    <div class="detail-value">${formattedDate}</div>
                 </div>
             </div>
-        </c:otherwise>
-    </c:choose>
+
+            <div class="detail-row">
+                <div class="detail-icon">⏰</div>
+                <div class="detail-content">
+                    <div class="detail-label">Horaire</div>
+                    <div class="detail-value">${formattedStartTime} - ${formattedEndTime}</div>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon">🏥</div>
+                <div class="detail-content">
+                    <div class="detail-label">Type de consultation</div>
+                    <div class="detail-value">${consultationType}</div>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon">📊</div>
+                <div class="detail-content">
+                    <div class="detail-label">Statut</div>
+                    <div class="detail-value">
+                        <span class="status-badge">${appointment.status}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <a href="${pageContext.request.contextPath}/patient/appointment/appointments" class="btn btn-secondary">📋 Mes rendez-vous</a>
+            <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-primary">🏠 Retour à l'accueil</a>
+        </div>
+    </c:if>
 </div>
 </body>
 </html>

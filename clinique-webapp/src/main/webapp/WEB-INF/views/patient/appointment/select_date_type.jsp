@@ -225,7 +225,7 @@
                         </label>
                     </div>
                     <div class="type-card">
-                        <input type="radio" name="appointmentType" id="type_emergency" value="EMERGENCY">
+                        <input type="radio" name="appointmentType" id="type_emergency" value="URGENCY">
                         <label for="type_emergency" class="type-label">
                             <span class="type-icon">🚨</span>
                             <span class="type-name">Urgence</span>

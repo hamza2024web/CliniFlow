@@ -35,10 +35,10 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         try {
             Appointment appointment = entityManager.createQuery(
                             "SELECT a FROM Appointment a " +
-                                    "JOIN FETCH a.patient p " +
-                                    "JOIN FETCH p.user " +
-                                    "JOIN FETCH a.doctor d " +
-                                    "JOIN FETCH d.user " +
+                                    "JOIN FETCH a.patient " +
+                                    "JOIN FETCH a.patient.user " +
+                                    "JOIN FETCH a.doctor " +
+                                    "JOIN FETCH a.doctor.user " +
                                     "WHERE a.id = :id",
                             Appointment.class
                     )
