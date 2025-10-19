@@ -19,4 +19,6 @@ public interface AppointmentService {
     List<Appointment> getAppointmentsByPatient(Patient patient);
     List<Appointment> getAppointmentsByDoctorAndDate(Doctor doctor, LocalDate date);
     List<Doctor> getDoctorsBySpeciality(Long specialityId);
+    List<Appointment> getAppointmentsByDoctor(Long doctor);
+    void markAsCompleted(Long appointmentId);
 }

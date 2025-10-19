@@ -96,7 +96,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> getAppointmentsByPatient(Patient patient) {
-        return appointmentRepository.findByPatient(patient);
+        return appointmentRepository.findByPatientWithDetails(patient);
     }
 
     @Override
@@ -109,6 +109,19 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Doctor> getDoctorsBySpeciality(Long specialtyId) {
         return doctorRepository.findBySpecialityId(specialtyId);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByDoctor(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId);
+    }
+
+    @Override
+    public void markAsCompleted(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new IllegalArgumentException("Rendez-vous non trouvé"));
+        appointment.setStatus(AppointmentStatus.COMPLETED);
+        appointmentRepository.update(appointment);
     }
 
     private int getDurationByType(AppointmentType type){

@@ -1,6 +1,7 @@
 package service;
 
 import com.clinique.domain.Doctor;
+import com.clinique.domain.Patient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -53,5 +54,10 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> findBySpecialtyId(Long specialtyId) {
         return doctorRepository.findBySpecialityId(specialtyId);
+    }
+
+    @Override
+    public List<Patient> getPatientsByDoctor(Long doctorId) {
+        return doctorRepository.findDistinctPatientsByDoctorId(doctorId);
     }
 }

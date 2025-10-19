@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import repository.Interface.AppointmentRepository;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,17 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         }
     }
 
+    @Override
+    @Transactional
+    public Appointment update(Appointment appointment) {
+        if (appointment.getId() == null){
+            entityManager.persist(appointment);
+            return appointment;
+        } else {
+            return entityManager.merge(appointment);
+        }
+    }
+
     public Optional<Appointment> findByIdWithRelations(Long id) {
         try {
             Appointment appointment = entityManager.createQuery(
@@ -48,6 +60,35 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Appointment> findByDoctorId(Long doctorId) {
+        return entityManager.createQuery(
+                        "SELECT a FROM Appointment a " +
+                                "JOIN FETCH a.patient " +
+                                "WHERE a.doctor.id = :doctorId " +
+                                "ORDER BY a.startDatetime",
+                        Appointment.class
+                )
+                .setParameter("doctorId", doctorId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Appointment> findByPatientWithDetails(Patient patient) {
+        return entityManager.createQuery(
+                        "SELECT a FROM Appointment a " +
+                                "JOIN FETCH a.patient " +
+                                "JOIN FETCH a.patient.user " +
+                                "JOIN FETCH a.doctor " +
+                                "JOIN FETCH a.doctor.user " +
+                                "WHERE a.patient = :patient " +
+                                "ORDER BY a.startDatetime DESC",
+                        Appointment.class
+                )
+                .setParameter("patient", patient)
+                .getResultList();
     }
 
     @Override

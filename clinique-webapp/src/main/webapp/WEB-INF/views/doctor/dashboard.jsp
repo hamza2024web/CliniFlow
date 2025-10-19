@@ -308,7 +308,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/doctor/agenda" class="nav-link">
                     <span class="nav-icon">📅</span>
                     Mon agenda
                 </a>
@@ -320,7 +320,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/doctor/mes_patients" class="nav-link">
                     <span class="nav-icon">👥</span>
                     Mes patients
                 </a>

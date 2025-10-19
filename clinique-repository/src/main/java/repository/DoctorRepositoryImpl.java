@@ -1,6 +1,8 @@
 package repository;
 
+import com.clinique.domain.Appointment;
 import com.clinique.domain.Doctor;
+import com.clinique.domain.Patient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -82,4 +84,20 @@ public class DoctorRepositoryImpl implements DoctorRepository {
         query.setParameter("specialtyId", specialtyId);
         return query.getResultList();
     }
+
+    @Override
+    public List<Patient> findDistinctPatientsByDoctorId(Long doctorId) {
+        String jpql = """
+        SELECT DISTINCT p
+        FROM Appointment a
+        INNER JOIN a.patient p
+        JOIN FETCH p.user
+        WHERE a.doctor.id = :doctorId
+    """;
+
+        TypedQuery<Patient> query = entityManager.createQuery(jpql, Patient.class);
+        query.setParameter("doctorId", doctorId);
+        return query.getResultList();
+    }
+
 }
