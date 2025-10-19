@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import repository.Interface.AppointmentRepository;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,17 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             entityManager.persist(appointment);
             entityManager.flush();
             return findByIdWithRelations(appointment.getId()).orElse(appointment);
+        } else {
+            return entityManager.merge(appointment);
+        }
+    }
+
+    @Override
+    @Transactional
+    public Appointment update(Appointment appointment) {
+        if (appointment.getId() == null){
+            entityManager.persist(appointment);
+            return appointment;
         } else {
             return entityManager.merge(appointment);
         }

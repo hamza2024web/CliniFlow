@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface AppointmentRepository {
     Appointment save(Appointment appointement);
+    Appointment update(Appointment appointment);
     Optional<Appointment> findById(Long id);
     List<Appointment> findByDoctorAndDate(Doctor doctor, LocalDateTime dayStart, LocalDateTime dayEnd);
     List<Appointment> findByPatient(Patient patient);
