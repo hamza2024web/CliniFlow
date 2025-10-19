@@ -19,4 +19,5 @@ public interface AppointmentRepository {
     List<Appointment> findByDoctorAndType(Doctor doctor , String type);
     Optional<Appointment> findByIdWithRelations(Long id);
     List<Appointment> findByDoctorId(Long doctorId);
+    List<Appointment> findByPatientWithDetails(Patient patient);
 }

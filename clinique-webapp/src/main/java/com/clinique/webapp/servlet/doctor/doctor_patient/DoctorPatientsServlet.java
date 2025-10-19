@@ -26,8 +26,9 @@ public class DoctorPatientsServlet extends HttpServlet {
             return;
         }
         Long id = user.getId();
-        Doctor doctor = doctorService.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("Aucun médecine associé à cet utilisateur."));        List<Patient> patients = doctorService.getPatientsByDoctor(doctor.getId());
+        Doctor doctor = doctorService.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("Aucun médecine associé à cet utilisateur."));
+        List<Patient> patients = doctorService.getPatientsByDoctor(doctor.getId());
         req.setAttribute("patients", patients);
-        req.getRequestDispatcher("/WEB-INF/views/mesPatients/doctor_patients.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/doctor/mesPatients/doctor_patients.jsp").forward(req, resp);
     }
 }

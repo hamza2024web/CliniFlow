@@ -32,6 +32,6 @@ public class DoctorAgendaServlet extends HttpServlet {
         Doctor doctor = doctorService.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("Aucun médecine associé à cet utilisateur."));
         List<Appointment> appointments = appointmentService.getAppointmentsByDoctor(doctor.getId());
         req.setAttribute("appointments", appointments);
-        req.getRequestDispatcher("/WEB-INF/views/agenda/doctor_agenda.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/doctor/agenda/doctor_agenda.jsp").forward(req, resp);
     }
 }

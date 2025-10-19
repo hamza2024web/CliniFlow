@@ -96,7 +96,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> getAppointmentsByPatient(Patient patient) {
-        return appointmentRepository.findByPatient(patient);
+        return appointmentRepository.findByPatientWithDetails(patient);
     }
 
     @Override

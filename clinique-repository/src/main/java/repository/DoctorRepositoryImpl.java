@@ -87,9 +87,17 @@ public class DoctorRepositoryImpl implements DoctorRepository {
 
     @Override
     public List<Patient> findDistinctPatientsByDoctorId(Long doctorId) {
-        String jpql = "SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId";
+        String jpql = """
+        SELECT DISTINCT p
+        FROM Appointment a
+        INNER JOIN a.patient p
+        JOIN FETCH p.user
+        WHERE a.doctor.id = :doctorId
+    """;
+
         TypedQuery<Patient> query = entityManager.createQuery(jpql, Patient.class);
         query.setParameter("doctorId", doctorId);
         return query.getResultList();
     }
+
 }

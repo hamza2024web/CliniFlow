@@ -52,10 +52,31 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
 
     @Override
     public List<Appointment> findByDoctorId(Long doctorId) {
-        String jpql = "SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId ORDER BY a.startDatetime";
-        TypedQuery<Appointment> query = entityManager.createQuery(jpql, Appointment.class);
-        query.setParameter("doctorId", doctorId);
-        return query.getResultList();
+        return entityManager.createQuery(
+                        "SELECT a FROM Appointment a " +
+                                "JOIN FETCH a.patient " +
+                                "WHERE a.doctor.id = :doctorId " +
+                                "ORDER BY a.startDatetime",
+                        Appointment.class
+                )
+                .setParameter("doctorId", doctorId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Appointment> findByPatientWithDetails(Patient patient) {
+        return entityManager.createQuery(
+                        "SELECT a FROM Appointment a " +
+                                "JOIN FETCH a.patient " +
+                                "JOIN FETCH a.patient.user " +
+                                "JOIN FETCH a.doctor " +
+                                "JOIN FETCH a.doctor.user " +
+                                "WHERE a.patient = :patient " +
+                                "ORDER BY a.startDatetime DESC",
+                        Appointment.class
+                )
+                .setParameter("patient", patient)
+                .getResultList();
     }
 
     @Override
