@@ -56,25 +56,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
 
     @Override
-    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    @Transactional
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
     @Override
-    @Transactional
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -125,7 +121,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public List<User> searchUsers(String keyword) {
         return userRepository.findAll();
     }

@@ -308,7 +308,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/patient/appointment/book-appointment" class="nav-link">
                     <span class="nav-icon">📅</span>
                     Prendre rendez-vous
                 </a>

@@ -11,4 +11,5 @@ public interface DoctorService {
     void delete(Long id);
     Optional<Doctor> findByUserId(Long userId);
     Optional<Doctor> findByRegistrationNumber(String registrationNumber);
+    List<Doctor> findBySpecialtyId(Long specialtyId);
 }
