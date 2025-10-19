@@ -389,8 +389,8 @@
                                         <span class="info-label">Téléphone</span>
                                         <span class="info-value">
                                             <c:choose>
-                                                <c:when test="${not empty patient.phoneNumber}">
-                                                    ${patient.phoneNumber}
+                                                <c:when test="${not empty patient.phone_number}">
+                                                    ${patient.phone_number}
                                                 </c:when>
                                                 <c:otherwise>
                                                     Non renseigné
@@ -402,8 +402,8 @@
                                         <span class="info-label">Date de naissance</span>
                                         <span class="info-value">
                                             <c:choose>
-                                                <c:when test="${not empty patient.user.birthDate}">
-                                                    ${patient.user.birthDate}
+                                                <c:when test="${not empty patient.user.birthDay}">
+                                                    ${patient.user.birthDay}
                                                 </c:when>
                                                 <c:otherwise>
                                                     Non renseignée
