@@ -1,6 +1,6 @@
-package com.clinique.webapp.servlet.doctor.agenda;
+package com.clinique.webapp.servlet.patient.my_appointment;
 
-import com.clinique.domain.Doctor;
+import com.clinique.domain.Patient;
 import com.clinique.domain.Appointment;
 import com.clinique.domain.User;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,17 +9,18 @@ import service.Interface.AppointmentService;
 import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import service.Interface.DoctorService;
+import service.Interface.PatientService;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/doctor/agenda")
-public class DoctorAgendaServlet extends HttpServlet {
+@WebServlet("/patient/mes_rendez_vous")
+public class PatientAppointmentsServlet extends HttpServlet {
     @Inject
     private AppointmentService appointmentService;
+
     @Inject
-    private DoctorService doctorService;
+    private PatientService patientService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,10 +29,9 @@ public class DoctorAgendaServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        Long id = user.getId();
-        Doctor doctor = doctorService.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("Aucun médecine associé à cet utilisateur."));
-        List<Appointment> appointments = appointmentService.getAppointmentsByDoctor(doctor.getId());
+        Patient patient = patientService.findByUserId(user.getId()).orElseThrow(() -> new IllegalArgumentException("Patient introuvable"));
+        List<Appointment> appointments = appointmentService.getAppointmentsByPatient(patient);
         req.setAttribute("appointments", appointments);
-        req.getRequestDispatcher("/WEB-INF/views/agenda/doctor_agenda.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/patient/my_appointment/patient_appointments.jsp").forward(req, resp);
     }
 }
