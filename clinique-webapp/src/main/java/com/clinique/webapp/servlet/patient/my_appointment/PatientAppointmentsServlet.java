@@ -3,6 +3,7 @@ package com.clinique.webapp.servlet.patient.my_appointment;
 import com.clinique.domain.Patient;
 import com.clinique.domain.Appointment;
 import com.clinique.domain.User;
+import com.clinique.webapp.dto.AppointmentDTO;
 import jakarta.servlet.annotation.WebServlet;
 import service.Interface.AppointmentService;
 import jakarta.inject.Inject;
@@ -44,27 +45,19 @@ public class PatientAppointmentsServlet extends HttpServlet {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-            Map<Long, String> formattedDates = appointments.stream().collect(Collectors.toMap(
-                            Appointment::getId,
-                            apt -> apt.getStartDatetime().format(dateFormatter)
-                    ));
+            List<AppointmentDTO> appointmentDTOs = appointments.stream()
+                    .map(apt -> new AppointmentDTO(
+                            apt,
+                            apt.getStartDatetime().format(dateFormatter),
+                            apt.getStartDatetime().format(timeFormatter),
+                            apt.getEndDatetime().format(timeFormatter)
+                    ))
+                    .collect(Collectors.toList());
 
-            Map<Long, String> formattedStartTimes = appointments.stream().collect(Collectors.toMap(
-                            Appointment::getId,
-                            apt -> apt.getStartDatetime().format(timeFormatter)
-                    ));
+            req.setAttribute("appointments", appointmentDTOs);
+            req.getRequestDispatcher("/WEB-INF/views/patient/my_appointment/patient_appointments.jsp")
+                    .forward(req, resp);
 
-            Map<Long, String> formattedEndTimes = appointments.stream().collect(Collectors.toMap(
-                            Appointment::getId,
-                            apt -> apt.getEndDatetime().format(timeFormatter)
-                    ));
-
-            req.setAttribute("appointments", appointments);
-            req.setAttribute("formattedDates", formattedDates);
-            req.setAttribute("formattedStartTimes", formattedStartTimes);
-            req.setAttribute("formattedEndTimes", formattedEndTimes);
-
-            req.getRequestDispatcher("/WEB-INF/views/patient/my_appointment/patient_appointments.jsp").forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("error", "Erreur: " + e.getMessage());

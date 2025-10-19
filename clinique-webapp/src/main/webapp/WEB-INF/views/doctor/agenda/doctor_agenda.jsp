@@ -443,8 +443,8 @@
 
                                 <div class="appointment-details">
                                     <div class="patient-name">
-                                        <div class="patient-avatar-small">${appointment.patient.nom.substring(0,1)}</div>
-                                            ${appointment.patient.nom} ${appointment.patient.prenom}
+                                        <div class="patient-avatar-small">${appointment.patient.last_name.substring(0,1)}</div>
+                                            ${appointment.patient.user.last_name} ${appointment.patient.user.first_name}
                                     </div>
                                     <div class="appointment-info">
                                         <div class="info-item">
@@ -453,7 +453,7 @@
                                         </div>
                                         <div class="info-item">
                                             <span class="info-icon">📱</span>
-                                                ${appointment.patient.telephone}
+                                                ${appointment.patient.phone_number}
                                         </div>
                                         <div class="info-item">
                                             <span class="type-badge ${appointment.type.toString().toLowerCase()}">

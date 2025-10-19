@@ -499,20 +499,18 @@
         <div class="appointments-container">
             <c:choose>
                 <c:when test="${not empty appointments}">
-                    <c:forEach var="appointment" items="${appointments}">
+                    <c:forEach var="apt" items="${appointments}">
                         <div class="appointment-card">
-                            <div class="appointment-card-header ${appointment.status == 'SCHEDULED' ? 'upcoming' : (appointment.status == 'COMPLETED' ? 'completed' : 'cancelled')}">
+                            <div class="appointment-card-header ${apt.status == 'SCHEDULED' ? 'upcoming' : (apt.status == 'COMPLETED' ? 'completed' : 'cancelled')}">
                                 <div class="doctor-info">
-                                    <div class="doctor-avatar">
-                                            ${appointment.doctor.user.firstName.substring(0,1)}
-                                    </div>
+                                    <div class="doctor-avatar">${apt.doctorInitial}</div>
                                     <div class="doctor-details">
-                                        <h3>Dr. ${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}</h3>
-                                        <p>Médecin généraliste</p>
+                                        <h3>Dr. ${apt.doctorFirstName} ${apt.doctorLastName}</h3>
+                                        <p>Médecin spécialisé en ${apt.specialty}</p>
                                     </div>
                                 </div>
-                                <span class="status-badge ${appointment.status == 'SCHEDULED' ? 'scheduled' : (appointment.status == 'COMPLETED' ? 'completed' : 'cancelled')}">
-                                        ${appointment.status}
+                                <span class="status-badge ${apt.status == 'SCHEDULED' ? 'scheduled' : (apt.status == 'COMPLETED' ? 'completed' : 'cancelled')}">
+                                        ${apt.status}
                                 </span>
                             </div>
 
@@ -521,7 +519,7 @@
                                     <div class="info-icon">📅</div>
                                     <div class="info-content">
                                         <h4>Date</h4>
-                                        <p>${appointment.startDatetime.toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern('dd/MM/yyyy'))}</p>
+                                        <p>${apt.formattedDate}</p>
                                     </div>
                                 </div>
 
@@ -529,7 +527,7 @@
                                     <div class="info-icon">⏰</div>
                                     <div class="info-content">
                                         <h4>Horaire</h4>
-                                        <p>${appointment.startDatetime.format(java.time.format.DateTimeFormatter.ofPattern('HH:mm'))} - ${appointment.endDatetime.format(java.time.format.DateTimeFormatter.ofPattern('HH:mm'))}</p>
+                                        <p>${apt.formattedStartTime} - ${apt.formattedEndTime}</p>
                                     </div>
                                 </div>
 
@@ -537,14 +535,7 @@
                                     <div class="info-icon">🏥</div>
                                     <div class="info-content">
                                         <h4>Type</h4>
-                                        <p>
-                                            <c:choose>
-                                                <c:when test="${appointment.appointmentType == 'CONSULTATION'}">Consultation</c:when>
-                                                <c:when test="${appointment.appointmentType == 'SPECIALIZED'}">Spécialisée</c:when>
-                                                <c:when test="${appointment.appointmentType == 'URGENCY'}">Urgence</c:when>
-                                                <c:otherwise>${appointment.appointmentType}</c:otherwise>
-                                            </c:choose>
-                                        </p>
+                                        <p>${apt.typeLabel}</p>
                                     </div>
                                 </div>
                             </div>
@@ -554,9 +545,9 @@
                                     <span>👁️</span>
                                     Détails
                                 </button>
-                                <c:if test="${appointment.status == 'SCHEDULED'}">
+                                <c:if test="${apt.status == 'SCHEDULED'}">
                                     <form method="post" action="${pageContext.request.contextPath}/patient/annuler-rdv" style="display: inline;">
-                                        <input type="hidden" name="appointmentId" value="${appointment.id}" />
+                                        <input type="hidden" name="appointmentId" value="${apt.id}" />
                                         <button type="submit" class="btn btn-cancel" onclick="return confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')">
                                             <span>✗</span>
                                             Annuler

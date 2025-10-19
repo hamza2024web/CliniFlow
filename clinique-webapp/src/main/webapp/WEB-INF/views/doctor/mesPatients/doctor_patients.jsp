@@ -337,12 +337,12 @@
                 <c:when test="${not empty patients}">
                     <div class="patients-grid" id="patientsGrid">
                         <c:forEach var="patient" items="${patients}">
-                            <div class="patient-card" data-patient='${patient.user.last_name} ${patient.first_name} ${patient.cin} ${patient.user.email} ${patient.phone_number}'>
+                            <div class="patient-card" data-patient='${patient.last_name} ${patient.first_name} ${patient.cin} ${patient.user.email} ${patient.phone_number}'>
                                 <div class="patient-avatar">${patient.nom.substring(0,1)}</div>
                                 <div class="patient-info">
                                     <div class="info-group">
                                         <span class="info-label">Nom & Prénom</span>
-                                        <span class="info-value">${patient.user.last_name} ${patient.user.first_name}</span>
+                                        <span class="info-value">${patient.last_name} ${patient.first_name}</span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">CIN</span>
@@ -354,11 +354,11 @@
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Téléphone</span>
-                                        <span class="info-value">${patient.phone_number}</span>
+                                        <span class="info-value">${patient.user.phone_number}</span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Date de naissance</span>
-                                        <span class="info-value">${patient.birth_day}</span>
+                                        <span class="info-value">${patient.user.birth_day}</span>
                                     </div>
                                     <div class="info-group">
                                         <span class="info-label">Adresse</span>
