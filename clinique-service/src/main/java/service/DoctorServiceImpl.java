@@ -50,4 +50,9 @@ public class DoctorServiceImpl implements DoctorService {
     public Optional<Doctor> findByRegistrationNumber(String registrationNumber) {
         return doctorRepository.findByRegistrationNumber(registrationNumber);
     }
+
+    @Override
+    public List<Doctor> findBySpecialtyId(Long specialtyId) {
+        return doctorRepository.findBySpecialityId(specialtyId);
+    }
 }

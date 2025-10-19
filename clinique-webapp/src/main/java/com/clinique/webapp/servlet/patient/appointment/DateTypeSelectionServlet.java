@@ -1,9 +1,11 @@
-package com.clinique.webapp.servlet.patient.apointment;
+package com.clinique.webapp.servlet.patient.appointment;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
+@WebServlet("/patient/appointment/select-date-type")
 public class DateTypeSelectionServlet extends HttpServlet {
 
     @Override
@@ -15,7 +17,7 @@ public class DateTypeSelectionServlet extends HttpServlet {
         req.setAttribute("doctorId", doctorId);
         req.setAttribute("specialtyId", specialtyId);
 
-        req.getRequestDispatcher("/WEB-INF/views/select_date_type.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/patient/appointment/select_date_type.jsp").forward(req, resp);
     }
 
     @Override
@@ -26,7 +28,7 @@ public class DateTypeSelectionServlet extends HttpServlet {
         String appointmentType = req.getParameter("appointmentType");
 
         resp.sendRedirect(req.getContextPath() +
-                "/select-slot?doctorId=" + doctorId +
+                "/patient/appointment/select-slot?doctorId=" + doctorId +
                 "&specialtyId=" + specialtyId +
                 "&date=" + date +
                 "&appointmentType=" + appointmentType);

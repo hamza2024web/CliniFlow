@@ -250,7 +250,7 @@
     </div>
 
     <div class="content">
-        <form method="post" action="${pageContext.request.contextPath}/select-slot">
+        <form method="post" action="${pageContext.request.contextPath}/patient/appointment/select-slot">
             <input type="hidden" name="doctorId" value="${doctorId}" />
             <input type="hidden" name="specialtyId" value="${specialtyId}" />
             <input type="hidden" name="date" value="${date}" />

@@ -15,53 +15,77 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f7fafc;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .page-header {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            overflow: hidden;
         }
 
-        .page-header h2 {
+        .header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
             font-size: 28px;
-            color: #2d3748;
             margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
         }
 
         .specialty-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            color: white;
+            background: rgba(255, 255, 255, 0.2);
             padding: 8px 20px;
             border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
+            margin-top: 15px;
         }
 
-        .form-container {
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .progress-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-step.active {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .content {
+            padding: 40px 30px;
         }
 
         .form-label {
             display: block;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: #2d3748;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .doctor-list {
@@ -129,6 +153,21 @@
             color: #718096;
         }
 
+        .no-doctors {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .no-doctors-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .no-doctors-text {
+            font-size: 18px;
+            color: #718096;
+        }
+
         .btn-container {
             display: flex;
             gap: 15px;
@@ -169,14 +208,6 @@
         }
 
         @media (max-width: 600px) {
-            .page-header {
-                padding: 20px;
-            }
-
-            .form-container {
-                padding: 20px;
-            }
-
             .doctor-avatar {
                 width: 50px;
                 height: 50px;
@@ -187,35 +218,59 @@
 </head>
 <body>
 <div class="container">
-    <div class="page-header">
-        <h2>👨‍⚕️ Choisissez votre médecin</h2>
-        <span class="specialty-badge">${specialty.nom}</span>
+    <div class="header">
+        <h1>👨‍⚕️ Choisir un médecin</h1>
+        <p>Étape 2 sur 4 : Sélectionnez votre praticien</p>
+        <c:if test="${not empty specialty}">
+            <span class="specialty-badge">🏥 ${specialty.name}</span>
+        </c:if>
+        <div class="progress-bar">
+            <div class="progress-step active"></div>
+            <div class="progress-step active"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+        </div>
     </div>
 
-    <div class="form-container">
-        <form method="post" action="${pageContext.request.contextPath}/select-doctor">
+    <div class="content">
+        <form method="post" action="${pageContext.request.contextPath}/patient/appointment/select-doctor">
             <input type="hidden" name="specialtyId" value="${specialtyId}" />
 
-            <label class="form-label">Sélectionnez un médecin disponible</label>
-            <div class="doctor-list">
-                <c:forEach var="doctor" items="${doctors}">
-                    <div class="doctor-card">
-                        <input type="radio" name="doctorId" id="doctor_${doctor.id}" value="${doctor.id}" required>
-                        <label for="doctor_${doctor.id}" class="doctor-label">
-                            <div class="doctor-avatar">${doctor.nom.substring(0,1)}</div>
-                            <div class="doctor-info">
-                                <h3>Dr. ${doctor.nom} ${doctor.prenom}</h3>
-                                <p>${specialty.nom}</p>
+            <c:choose>
+                <c:when test="${not empty doctors}">
+                    <label class="form-label">Sélectionnez un médecin disponible</label>
+                    <div class="doctor-list">
+                        <c:forEach var="doctor" items="${doctors}">
+                            <div class="doctor-card">
+                                <input type="radio" name="doctorId" id="doctor_${doctor.id}" value="${doctor.id}" required>
+                                <label for="doctor_${doctor.id}" class="doctor-label">
+                                    <div class="doctor-avatar">
+                                            ${doctor.nom.substring(0,1).toUpperCase()}
+                                    </div>
+                                    <div class="doctor-info">
+                                        <h3>Dr. ${doctor.nom} ${doctor.prenom}</h3>
+                                        <p>${specialty.name}</p>
+                                    </div>
+                                </label>
                             </div>
-                        </label>
+                        </c:forEach>
                     </div>
-                </c:forEach>
-            </div>
 
-            <div class="btn-container">
-                <button type="button" onclick="history.back()" class="btn btn-secondary">← Retour</button>
-                <button type="submit" class="btn btn-primary">Suivant →</button>
-            </div>
+                    <div class="btn-container">
+                        <a href="${pageContext.request.contextPath}/patient/appointment/book-appointment" class="btn btn-secondary">← Retour</a>
+                        <button type="submit" class="btn btn-primary">Suivant →</button>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="no-doctors">
+                        <div class="no-doctors-icon">👨‍⚕️</div>
+                        <p class="no-doctors-text">Aucun médecin disponible pour cette spécialité</p>
+                    </div>
+                    <div class="btn-container">
+                        <a href="${pageContext.request.contextPath}/patient/appointment/book-appointment" class="btn btn-primary">← Retour aux spécialités</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </form>
     </div>
 </div>

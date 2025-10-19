@@ -1,7 +1,8 @@
-package com.clinique.webapp.servlet.patient.apointment;
+package com.clinique.webapp.servlet.patient.appointment;
 
 import com.clinique.domain.Doctor;
 import com.clinique.domain.Enum.AppointmentType;
+import jakarta.servlet.annotation.WebServlet;
 import repository.Interface.DoctorRepository;
 import service.Interface.AppointmentService;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+@WebServlet("/patient/appointment/select-slot")
 public class SlotSelectionServlet extends HttpServlet {
     @Inject
     private AppointmentService appointmentService;
@@ -40,7 +42,7 @@ public class SlotSelectionServlet extends HttpServlet {
         req.setAttribute("date", dateStr);
         req.setAttribute("appointmentType", appointmentTypeStr);
 
-        req.getRequestDispatcher("/WEB-INF/views/select_slot.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/patient/appointment/select_slot.jsp").forward(req, resp);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class SlotSelectionServlet extends HttpServlet {
 
         // Transmettre à la servlet de réservation
         resp.sendRedirect(req.getContextPath() +
-                "/confirm-reservation?doctorId=" + doctorId +
+                "/patient/appointment/confirm-reservation?doctorId=" + doctorId +
                 "&specialtyId=" + specialtyId +
                 "&date=" + date +
                 "&appointmentType=" + appointmentType +

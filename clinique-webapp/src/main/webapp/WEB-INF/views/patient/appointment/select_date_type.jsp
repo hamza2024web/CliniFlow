@@ -196,7 +196,7 @@
     </div>
 
     <div class="form-container">
-        <form method="post" action="${pageContext.request.contextPath}/select-date-type">
+        <form method="post" action="${pageContext.request.contextPath}/patient/appointment/select-date-type">
             <input type="hidden" name="doctorId" value="${doctorId}" />
             <input type="hidden" name="specialtyId" value="${specialtyId}" />
 

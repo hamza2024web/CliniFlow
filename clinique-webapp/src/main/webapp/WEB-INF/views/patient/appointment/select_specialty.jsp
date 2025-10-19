@@ -192,7 +192,7 @@
     </div>
 
     <div class="content">
-        <form method="post" action="${pageContext.request.contextPath}/select-specialty">
+        <form method="post" action="${pageContext.request.contextPath}/patient/appointment/book-appointment">
             <div class="form-group">
                 <label class="form-label">Sélectionnez la spécialité médicale</label>
                 <div class="specialty-grid">
@@ -201,7 +201,7 @@
                             <input type="radio" name="specialtyId" id="specialty_${specialty.id}" value="${specialty.id}" required>
                             <label for="specialty_${specialty.id}" class="specialty-label">
                                 <span class="specialty-icon">🩺</span>
-                                <span class="specialty-name">${specialty.nom}</span>
+                                <span class="specialty-name">${specialty.name}</span>
                             </label>
                         </div>
                     </c:forEach>
@@ -209,7 +209,7 @@
             </div>
 
             <div class="btn-container">
-                <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary" style="text-decoration: none; text-align: center; line-height: 1.5;">Annuler</a>
+                <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-secondary" style="text-decoration: none; text-align: center; line-height: 1.5;">Annuler</a>
                 <button type="submit" class="btn btn-primary">Suivant →</button>
             </div>
         </form>

@@ -294,8 +294,8 @@
             </div>
 
             <div class="btn-container">
-                <a href="${pageContext.request.contextPath}/appointments" class="btn btn-secondary">📋 Mes rendez-vous</a>
-                <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">🏠 Retour à l'accueil</a>
+                <a href="${pageContext.request.contextPath}/patient/appointment/appointments" class="btn btn-secondary">📋 Mes rendez-vous</a>
+                <a href="${pageContext.request.contextPath}/patient/dashboard" class="btn btn-primary">🏠 Retour à l'accueil</a>
             </div>
         </c:when>
         <c:otherwise>
@@ -308,8 +308,8 @@
             <div class="error-content">
                 <p>Nous sommes désolés, une erreur s'est produite lors de la réservation de votre rendez-vous. Veuillez réessayer ou contacter notre service client si le problème persiste.</p>
                 <div class="btn-container">
-                    <a href="${pageContext.request.contextPath}/book-appointment" class="btn btn-primary">🔄 Réessayer</a>
-                    <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary">🏠 Retour à l'accueil</a>
+                    <a href="${pageContext.request.contextPath}/patient/appointment/book-appointment" class="btn btn-primary">🔄 Réessayer</a>
+                    <a href="${pageContext.request.contextPath}/dashboard/patient" class="btn btn-secondary">🏠 Retour à l'accueil</a>
                 </div>
             </div>
         </c:otherwise>

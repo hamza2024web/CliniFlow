@@ -1,8 +1,9 @@
-package com.clinique.webapp.servlet.patient.apointment;
+package com.clinique.webapp.servlet.patient.appointment;
 
 import com.clinique.domain.*;
 import com.clinique.domain.Enum.AppointmentType;
 import com.clinique.domain.Enum.Priority;
+import jakarta.servlet.annotation.WebServlet;
 import service.Interface.AppointmentService;
 
 import jakarta.inject.Inject;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@WebServlet("/patient/appointment/confirm-reservation")
 public class ReservationServlet extends HttpServlet {
     @Inject
     private AppointmentService appointmentService;
@@ -37,7 +39,6 @@ public class ReservationServlet extends HttpServlet {
         LocalDateTime slotStart = LocalDateTime.parse(slotStartStr);
         AppointmentType appointmentType = AppointmentType.valueOf(appointmentTypeStr);
 
-        // Récupérer le patient connecté (à adapter selon ton système d’auth)
         User user = (User) req.getSession().getAttribute("user");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
@@ -54,6 +55,6 @@ public class ReservationServlet extends HttpServlet {
         Appointment appointment = appointmentService.createAppointment(patient, doctor, slotStart, appointmentType, priority).orElse(null);
 
         req.setAttribute("appointment", appointment);
-        req.getRequestDispatcher("/WEB-INF/views/confirmation.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/patient/appointment/confirmation.jsp").forward(req, resp);
     }
 }
