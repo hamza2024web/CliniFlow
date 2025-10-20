@@ -59,30 +59,21 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @Override
     public List<MedicalNote> findByDoctorId(Long doctorId) {
-        List<Long> ids = entityManager.createQuery(
-                        "SELECT n.id FROM MedicalNote n " +
+        List<MedicalNote> notes = entityManager.createQuery(
+                        "SELECT DISTINCT n FROM MedicalNote n " +
+                                "JOIN FETCH n.patient " +
+                                "JOIN FETCH n.patient.user " +
+                                "JOIN FETCH n.appointment " +
+                                "JOIN FETCH n.doctor " +
+                                "JOIN FETCH n.doctor.user " +
                                 "WHERE n.doctor.id = :doctorId " +
                                 "ORDER BY n.createdAt DESC",
-                        Long.class
+                        MedicalNote.class
                 )
                 .setParameter("doctorId", doctorId)
                 .getResultList();
 
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entityManager.createQuery(
-                        "SELECT n FROM MedicalNote n " +
-                                "JOIN FETCH n.patient p " +
-                                "JOIN FETCH p.user " +
-                                "JOIN FETCH n.appointment " +
-                                "WHERE n.id IN :ids " +
-                                "ORDER BY n.createdAt DESC",
-                        MedicalNote.class
-                )
-                .setParameter("ids", ids)
-                .getResultList();
+        return notes;
     }
 
     @Override

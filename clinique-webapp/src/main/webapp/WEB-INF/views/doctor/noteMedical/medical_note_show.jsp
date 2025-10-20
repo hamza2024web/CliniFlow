@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -410,6 +411,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
 
         .btn-edit:hover {
@@ -545,20 +547,16 @@
                 <!-- Stats Bar -->
                 <div class="stats-bar">
                     <div class="stat-item">
-                        <div class="stat-value">${medical_notes.size()}</div>
+                        <div class="stat-value">${fn:length(medical_notes)}</div>
                         <div class="stat-label">Notes totales</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">
-                            <c:set var="uniquePatients" value="0"/>
-                            <c:set var="patientIds" value=""/>
+                            <jsp:useBean id="patientSet" class="java.util.HashSet" scope="page"/>
                             <c:forEach var="note" items="${medical_notes}">
-                                <c:if test="${!patientIds.contains(note.patient.id)}">
-                                    <c:set var="patientIds" value="${patientIds}${note.patient.id},"/>
-                                    <c:set var="uniquePatients" value="${uniquePatients + 1}"/>
-                                </c:if>
+                                <c:set target="${patientSet}" property="${note.patient.id}" value="true"/>
                             </c:forEach>
-                                ${uniquePatients}
+                                ${patientSet.size()}
                         </div>
                         <div class="stat-label">Patients suivis</div>
                     </div>
@@ -595,22 +593,10 @@
                             <div class="note-header">
                                 <div class="patient-info">
                                     <div class="patient-avatar">
-                                        <c:choose>
-                                            <c:when test="${not empty note.patient.user.lastName}">
-                                                ${note.patient.user.lastName.substring(0,1).toUpperCase()}
-                                            </c:when>
-                                            <c:otherwise>P</c:otherwise>
-                                        </c:choose>
+                                            ${not empty note.patient.user.firstName ? note.patient.user.firstName.substring(0,1).toUpperCase() : 'P'}
                                     </div>
                                     <div class="patient-details">
-                                        <h3>
-                                            <c:choose>
-                                                <c:when test="${not empty note.patient.user}">
-                                                    ${note.patient.user.firstName} ${note.patient.user.lastName}
-                                                </c:when>
-                                                <c:otherwise>Patient inconnu</c:otherwise>
-                                            </c:choose>
-                                        </h3>
+                                        <h3>${note.patient.user.firstName} ${note.patient.user.lastName}</h3>
                                         <p>
                                             <c:if test="${not empty note.patient.cin}">
                                                 CIN: ${note.patient.cin}
@@ -624,28 +610,17 @@
                                 <div class="note-date">
                                     <div class="date-label">Créée le</div>
                                     <div class="date-value">
-                                        <c:choose>
-                                            <c:when test="${not empty note.createdAt}">
-                                                <fmt:formatDate value="${note.createdAt}" pattern="dd/MM/yyyy"/>
-                                            </c:when>
-                                            <c:otherwise>--/--/----</c:otherwise>
-                                        </c:choose>
+                                        <fmt:formatDate value="${note.createdAt}" pattern="dd/MM/yyyy"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="note-body">
                                 <div class="note-content">
-                                    <c:choose>
-                                        <c:when test="${not empty note.content}">
-                                            ${note.content}
-                                        </c:when>
-                                        <c:otherwise>
-                                            <em>Aucun contenu</em>
-                                        </c:otherwise>
-                                    </c:choose>
+                                        ${fn:substring(note.content, 0, 300)}
+                                        ${fn:length(note.content) > 300 ? '...' : ''}
                                 </div>
-                                <a href="${pageContext.request.contextPath}/doctor/medical-note/view/${note.id}"
+                                <a href="${pageContext.request.contextPath}/doctor/medical-note/view?id=${note.id}"
                                    class="read-more">
                                     Voir les détails complets →
                                 </a>
@@ -655,8 +630,8 @@
                                 <div class="note-tags">
                                     <span class="tag">
                                         <c:choose>
-                                            <c:when test="${not empty note.appointment.type}">
-                                                ${note.appointment.type}
+                                            <c:when test="${not empty note.appointment.appointmentType}">
+                                                ${note.appointment.appointmentType}
                                             </c:when>
                                             <c:otherwise>Consultation</c:otherwise>
                                         </c:choose>
@@ -664,7 +639,7 @@
                                     <span class="tag">Note complète</span>
                                 </div>
                                 <div class="btn-actions">
-                                    <a href="${pageContext.request.contextPath}/doctor/medical-note/edit/${note.id}"
+                                    <a href="${pageContext.request.contextPath}/doctor/medical-note/edit?id=${note.id}"
                                        class="btn-edit">
                                         <span>✏️</span>
                                         Modifier
@@ -701,7 +676,6 @@
 </div>
 
 <script>
-    // Filter notes
     function filterNotes() {
         const input = document.getElementById('searchInput');
         const filter = input.value.toLowerCase();
@@ -717,7 +691,6 @@
         }
     }
 
-    // Sort by date
     function sortByDate() {
         const grid = document.getElementById('notesGrid');
         const items = Array.from(document.getElementsByClassName('note-item'));
@@ -731,7 +704,6 @@
         items.forEach(item => grid.appendChild(item));
     }
 
-    // Sort by patient
     function sortByPatient() {
         const grid = document.getElementById('notesGrid');
         const items = Array.from(document.getElementsByClassName('note-item'));
@@ -745,14 +717,12 @@
         items.forEach(item => grid.appendChild(item));
     }
 
-    // Print note
     function printNote(noteId) {
-        window.open('${pageContext.request.contextPath}/doctor/medical-note/print/' + noteId, '_blank');
+        window.open('${pageContext.request.contextPath}/doctor/medical-note/print?id=' + noteId, '_blank');
     }
 
-    // Download as PDF
     function downloadNote(noteId) {
-        window.location.href = '${pageContext.request.contextPath}/doctor/medical-note/download/' + noteId;
+        window.location.href = '${pageContext.request.contextPath}/doctor/medical-note/download?id=' + noteId;
     }
 </script>
 </body>
