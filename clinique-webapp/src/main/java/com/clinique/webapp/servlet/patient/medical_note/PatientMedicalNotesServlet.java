@@ -26,8 +26,7 @@ public class PatientMedicalNotesServlet extends HttpServlet {
     private PatientService patientService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
             User user = (User) req.getSession().getAttribute("user");
@@ -36,8 +35,7 @@ public class PatientMedicalNotesServlet extends HttpServlet {
                 return;
             }
 
-            Patient patient = patientService.findByUserId(user.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Patient introuvable"));
+            Patient patient = patientService.findByUserId(user.getId()).orElseThrow(() -> new IllegalArgumentException("Patient introuvable"));
 
             List<MedicalNote> notes = medicalNoteService.getNotesByPatient(patient);
 
@@ -52,8 +50,7 @@ public class PatientMedicalNotesServlet extends HttpServlet {
             req.setAttribute("notes", notes);
             req.setAttribute("formattedDates", formattedDates);
 
-            req.getRequestDispatcher("/WEB-INF/views/patient/medical_note/medical_notes.jsp")
-                    .forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/patient/medical_note/medical_notes.jsp").forward(req, resp);
 
         } catch (Exception e) {
             e.printStackTrace();

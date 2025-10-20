@@ -7,12 +7,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import repository.Interface.MedicalNoteRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @PersistenceContext
@@ -40,31 +41,18 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @Override
     public List<MedicalNote> findByPatientId(Patient patient) {
-        List<Long> ids = entityManager.createQuery(
-                        "SELECT n.id FROM MedicalNote n " +
-                                "WHERE n.patient = :patient " +
-                                "ORDER BY n.createdAt DESC",
-                        Long.class
-                )
-                .setParameter("patient", patient)
-                .getResultList();
-
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
-        }
-
         return entityManager.createQuery(
-                        "SELECT n FROM MedicalNote n " +
+                        "SELECT DISTINCT n FROM MedicalNote n " +
                                 "JOIN FETCH n.appointment " +
-                                "JOIN FETCH n.patient p " +
-                                "JOIN FETCH p.user " +
-                                "JOIN FETCH n.doctor d " +
-                                "JOIN FETCH d.user " +
-                                "WHERE n.id IN :ids " +
+                                "JOIN FETCH n.patient " +
+                                "JOIN FETCH n.patient.user " +
+                                "JOIN FETCH n.doctor " +
+                                "JOIN FETCH n.doctor.user " +
+                                "WHERE n.patient = :patient " +
                                 "ORDER BY n.createdAt DESC",
                         MedicalNote.class
                 )
-                .setParameter("ids", ids)
+                .setParameter("patient", patient)
                 .getResultList();
     }
 
