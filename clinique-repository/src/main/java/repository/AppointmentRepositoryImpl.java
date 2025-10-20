@@ -92,6 +92,25 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     }
 
     @Override
+    public Appointment findByIdWithPatient(Long appointmentId) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT a FROM Appointment a " +
+                                    "JOIN FETCH a.patient " +
+                                    "JOIN FETCH a.patient.user " +
+                                    "JOIN FETCH a.doctor " +
+                                    "JOIN FETCH a.doctor.user " +
+                                    "WHERE a.id = :appointmentId",
+                            Appointment.class
+                    )
+                    .setParameter("appointmentId", appointmentId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public Optional<Appointment> findById(Long id) {
         Appointment appointment = entityManager.find(Appointment.class, id);
         return Optional.ofNullable(appointment);

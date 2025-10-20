@@ -465,7 +465,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="<%= request.getContextPath() %>/doctor/medical-notes" class="nav-link">
                     <span class="nav-icon">📝</span>
                     Notes médicales
                 </a>
@@ -604,7 +604,7 @@
                                                 </a>
                                             </c:when>
                                             <c:otherwise>
-                                                <a href="${pageContext.request.contextPath}/doctor/medical-note/create/${appointment.id}"
+                                                <a href="${pageContext.request.contextPath}/doctor/medical-note/create?appointmentId=${appointment.id}"
                                                    class="btn-medical-note">
                                                     <span>📝</span>
                                                     Ajouter une note

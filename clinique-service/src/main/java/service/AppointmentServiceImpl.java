@@ -124,6 +124,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.update(appointment);
     }
 
+    @Override
+    public Appointment getAppointmentById(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new IllegalArgumentException("Rendez-vous non trouvé"));
+        return appointment;
+    }
+
+    @Override
+    public Appointment getAppointmentWithPatient(Long appointmentId) {
+        return appointmentRepository.findByIdWithPatient(appointmentId);
+    }
+
     private int getDurationByType(AppointmentType type){
         switch (type) {
             case CONSULTATION: return 30;

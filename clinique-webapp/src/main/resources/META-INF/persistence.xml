@@ -12,7 +12,6 @@
         <class>com.clinique.domain.User</class>
         <class>com.clinique.domain.Patient</class>
         <class>com.clinique.domain.Doctor</class>
-        <class>com.clinique.domain.MedicalRecord</class>
         <class>com.clinique.domain.MedicalNote</class>
         <class>com.clinique.domain.Appointment</class>
         <class>com.clinique.domain.WaitingListEntry</class>

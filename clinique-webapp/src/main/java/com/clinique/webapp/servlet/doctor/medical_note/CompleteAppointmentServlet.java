@@ -1,4 +1,4 @@
-package com.clinique.webapp.servlet.doctor.note;
+package com.clinique.webapp.servlet.doctor.medical_note;
 
 import com.clinique.domain.User;
 import jakarta.inject.Inject;
