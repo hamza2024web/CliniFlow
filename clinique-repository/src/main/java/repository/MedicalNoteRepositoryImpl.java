@@ -10,6 +10,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import repository.Interface.MedicalNoteRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
@@ -58,13 +59,30 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
 
     @Override
     public List<MedicalNote> findByDoctorId(Long doctorId) {
-        String jpql = "SELECT n FROM MedicalNote n " +
-                "JOIN FETCH n.doctor d " +
-                "JOIN FETCH d.user " +
-                "WHERE d.id = :doctorId";
-        TypedQuery<MedicalNote> query = entityManager.createQuery(jpql, MedicalNote.class);
-        query.setParameter("doctorId", doctorId);
-        return query.getResultList();
+        List<Long> ids = entityManager.createQuery(
+                        "SELECT n.id FROM MedicalNote n " +
+                                "WHERE n.doctor.id = :doctorId " +
+                                "ORDER BY n.createdAt DESC",
+                        Long.class
+                )
+                .setParameter("doctorId", doctorId)
+                .getResultList();
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return entityManager.createQuery(
+                        "SELECT n FROM MedicalNote n " +
+                                "JOIN FETCH n.patient p " +
+                                "JOIN FETCH p.user " +
+                                "JOIN FETCH n.appointment " +
+                                "WHERE n.id IN :ids " +
+                                "ORDER BY n.createdAt DESC",
+                        MedicalNote.class
+                )
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
     @Override
