@@ -39,7 +39,7 @@ public class PatientMedicalNotesServlet extends HttpServlet {
             Patient patient = patientService.findByUserId(user.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Patient introuvable"));
 
-            List<MedicalNote> notes = medicalNoteService.getNotesByPatient(patient.getId());
+            List<MedicalNote> notes = medicalNoteService.getNotesByPatient(patient);
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'à' HH:mm");
 
@@ -52,7 +52,7 @@ public class PatientMedicalNotesServlet extends HttpServlet {
             req.setAttribute("notes", notes);
             req.setAttribute("formattedDates", formattedDates);
 
-            req.getRequestDispatcher("/WEB-INF/views/patient/medical_notes.jsp")
+            req.getRequestDispatcher("/WEB-INF/views/patient/medical_note/medical_notes.jsp")
                     .forward(req, resp);
 
         } catch (Exception e) {

@@ -22,4 +22,5 @@ public interface AppointmentService {
     List<Appointment> getAppointmentsByDoctor(Long doctor);
     void markAsCompleted(Long appointmentId);
     Appointment getAppointmentById(Long appointmentId);
+    Appointment getAppointmentWithPatient(Long appointmentId);
 }

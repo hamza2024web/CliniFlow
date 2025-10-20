@@ -604,7 +604,7 @@
                                                 </a>
                                             </c:when>
                                             <c:otherwise>
-                                                <a href="${pageContext.request.contextPath}/doctor/medical-note/create/${appointment.id}"
+                                                <a href="${pageContext.request.contextPath}/doctor/medical-note/create?appointmentId=${appointment.id}"
                                                    class="btn-medical-note">
                                                     <span>📝</span>
                                                     Ajouter une note

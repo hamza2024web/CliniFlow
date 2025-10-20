@@ -394,7 +394,7 @@
             </div>
 
             <!-- Form -->
-            <form method="post" action="${pageContext.request.contextPath}/doctor/medical-note/create/${appointment.id}" id="noteForm">
+            <form method="post" action="${pageContext.request.contextPath}/doctor/medical-note/create">
                 <input type="hidden" name="appointmentId" value="${appointment.id}" />
 
                 <!-- Quick Insert Templates -->

@@ -130,6 +130,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointment;
     }
 
+    @Override
+    public Appointment getAppointmentWithPatient(Long appointmentId) {
+        return appointmentRepository.findByIdWithPatient(appointmentId);
+    }
+
     private int getDurationByType(AppointmentType type){
         switch (type) {
             case CONSULTATION: return 30;

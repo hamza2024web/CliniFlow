@@ -21,4 +21,5 @@ public interface AppointmentRepository {
     Optional<Appointment> findByIdWithRelations(Long id);
     List<Appointment> findByDoctorId(Long doctorId);
     List<Appointment> findByPatientWithDetails(Patient patient);
+    Appointment findByIdWithPatient(Long appointmentId);
 }

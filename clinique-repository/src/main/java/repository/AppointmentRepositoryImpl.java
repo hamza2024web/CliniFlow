@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import repository.Interface.AppointmentRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,18 +78,50 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
 
     @Override
     public List<Appointment> findByPatientWithDetails(Patient patient) {
-        return entityManager.createQuery(
-                        "SELECT a FROM Appointment a " +
-                                "JOIN FETCH a.patient " +
-                                "JOIN FETCH a.patient.user " +
-                                "JOIN FETCH a.doctor " +
-                                "JOIN FETCH a.doctor.user " +
+        List<Long> ids = entityManager.createQuery(
+                        "SELECT a.id FROM Appointment a " +
                                 "WHERE a.patient = :patient " +
                                 "ORDER BY a.startDatetime DESC",
-                        Appointment.class
+                        Long.class
                 )
                 .setParameter("patient", patient)
                 .getResultList();
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return entityManager.createQuery(
+                        "SELECT a FROM Appointment a " +
+                                "JOIN FETCH a.patient p " +
+                                "JOIN FETCH p.user " +
+                                "JOIN FETCH a.doctor d " +
+                                "JOIN FETCH d.user " +
+                                "WHERE a.id IN :ids " +
+                                "ORDER BY a.startDatetime DESC",
+                        Appointment.class
+                )
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
+    @Override
+    public Appointment findByIdWithPatient(Long appointmentId) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT a FROM Appointment a " +
+                                    "JOIN FETCH a.patient p " +
+                                    "JOIN FETCH p.user " +
+                                    "JOIN FETCH a.doctor d " +
+                                    "JOIN FETCH d.user " +
+                                    "WHERE a.id = :appointmentId",
+                            Appointment.class
+                    )
+                    .setParameter("appointmentId", appointmentId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

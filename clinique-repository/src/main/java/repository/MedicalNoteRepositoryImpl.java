@@ -2,12 +2,14 @@ package repository;
 
 
 import com.clinique.domain.MedicalNote;
+import com.clinique.domain.Patient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import repository.Interface.MedicalNoteRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
@@ -37,14 +39,33 @@ public class MedicalNoteRepositoryImpl implements MedicalNoteRepository {
     }
 
     @Override
-    public List<MedicalNote> findByPatientId(Long patientId) {
-        String jpql = "SELECT n FROM MedicalNote n " +
-                "JOIN FETCH n.patient p " +
-                "JOIN FETCH p.user " +
-                "WHERE p.id = :patientId";
-        TypedQuery<MedicalNote> query = entityManager.createQuery(jpql, MedicalNote.class);
-        query.setParameter("patientId", patientId);
-        return query.getResultList();
+    public List<MedicalNote> findByPatientId(Patient patient) {
+        List<Long> ids = entityManager.createQuery(
+                        "SELECT n.id FROM MedicalNote n " +
+                                "WHERE n.patient = :patient " +
+                                "ORDER BY n.createdAt DESC",
+                        Long.class
+                )
+                .setParameter("patient", patient)
+                .getResultList();
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return entityManager.createQuery(
+                        "SELECT n FROM MedicalNote n " +
+                                "JOIN FETCH n.appointment " +
+                                "JOIN FETCH n.patient p " +
+                                "JOIN FETCH p.user " +
+                                "JOIN FETCH n.doctor d " +
+                                "JOIN FETCH d.user " +
+                                "WHERE n.id IN :ids " +
+                                "ORDER BY n.createdAt DESC",
+                        MedicalNote.class
+                )
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
     @Override

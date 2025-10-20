@@ -1,6 +1,7 @@
 package service;
 
 import com.clinique.domain.MedicalNote;
+import com.clinique.domain.Patient;
 import jakarta.enterprise.context.ApplicationScoped;
 import repository.Interface.MedicalNoteRepository;
 import service.Interface.MedicalNoteService;
@@ -37,8 +38,8 @@ public class MedicalNoteServiceImpl implements MedicalNoteService {
     }
 
     @Override
-    public List<MedicalNote> getNotesByPatient(Long patientId) {
-        return medicalNoteRepository.findByPatientId(patientId);
+    public List<MedicalNote> getNotesByPatient(Patient patient) {
+        return medicalNoteRepository.findByPatientId(patient);
     }
 
     @Override
