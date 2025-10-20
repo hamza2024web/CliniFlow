@@ -551,15 +551,9 @@
                         <div class="stat-label">Notes totales</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">
-                            <jsp:useBean id="patientSet" class="java.util.HashSet" scope="page"/>
-                            <c:forEach var="note" items="${medical_notes}">
-                                <c:set target="${patientSet}" property="${note.patient.id}" value="true"/>
-                            </c:forEach>
-                                ${patientSet.size()}
-                        </div>
-                        <div class="stat-label">Patients suivis</div>
+                            <div class="stat-value">${uniquePatientCount}</div>
                     </div>
+                    <div class="stat-label">Patients suivis</div>
                     <div class="stat-item">
                         <div class="stat-value">100%</div>
                         <div class="stat-label">Conformité</div>
