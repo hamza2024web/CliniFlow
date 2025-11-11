@@ -12,7 +12,6 @@
         <class>com.clinique.domain.User</class>
         <class>com.clinique.domain.Patient</class>
         <class>com.clinique.domain.Doctor</class>
-        <class>com.clinique.domain.MedicalRecord</class>
         <class>com.clinique.domain.MedicalNote</class>
         <class>com.clinique.domain.Appointment</class>
         <class>com.clinique.domain.WaitingListEntry</class>
@@ -21,32 +20,25 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
-            <!-- Options: validate | update | create | create-drop -->
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <!-- Use ONLY Hibernate's schema generation -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
 
-            <!-- Force JPA to generate schema in container -->
+            <!-- Disable Jakarta Persistence schema generation to avoid conflicts -->
+            <!-- Remove hibernate.hbm2ddl.auto -->
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
             <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
             <property name="jakarta.persistence.schema-generation.drop-source" value="metadata"/>
-            <property name="jakarta.persistence.schema-generation.scripts.action" value="none"/>
 
-            <!-- Charger import.sql automatiquement -->
-            <property name="hibernate.hbm2ddl.import_files" value="import.sql"/>
-
-            <!-- Dialecte PostgreSQL -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-
-            <!-- Affichage des requêtes SQL (pour le développement) -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
 
-            <!-- Configuration du cache de second niveau -->
             <property name="hibernate.cache.use_second_level_cache" value="true"/>
             <property name="hibernate.cache.region.factory_class" value="org.infinispan.hibernate.cache.v53.InfinispanRegionFactory"/>
 
-            <!-- Validation automatique du schéma -->
             <property name="jakarta.persistence.validation.mode" value="AUTO"/>
         </properties>
+
     </persistence-unit>
 </persistence>

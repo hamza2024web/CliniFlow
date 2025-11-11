@@ -1,0 +1,465 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.clinique.domain.Department" %>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Départements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            color: #2d3748;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .sidebar-header .role-badge {
+            display: inline-block;
+            background: #e53e3e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 12px;
+            background: #e53e3e;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header .icon {
+            font-size: 32px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Table Container */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            font-size: 18px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f7fafc;
+            padding: 8px 16px;
+            border-radius: 8px;
+            gap: 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            width: 250px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f7fafc;
+        }
+
+        th {
+            padding: 16px 30px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 20px 30px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-code {
+            background: #ebf4ff;
+            color: #3182ce;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit {
+            padding: 8px 16px;
+            background: #edf2f7;
+            color: #4a5568;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-delete {
+            padding: 8px 16px;
+            background: #fff5f5;
+            color: #e53e3e;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .search-box input {
+                width: 150px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Clinique Digitale</h2>
+            <span class="role-badge">ADMINISTRATEUR</span>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/admin/dashboard" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    Tableau de bord
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/admin/users" class="nav-link">
+                    <span class="nav-icon">👥</span>
+                    Gestion des utilisateurs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/admin/departments" class="nav-link active">
+                    <span class="nav-icon">🏥</span>
+                    Départements
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/admin/specialties" class="nav-link">
+                    <span class="nav-icon">🎓</span>
+                    Spécialités
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    Configuration
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    Statistiques
+                </a>
+            </li>
+        </ul>
+
+        <a href="<%=request.getContextPath()%>/logout" class="logout-btn">Se déconnecter</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1>
+                <span class="icon">🏥</span>
+                Gestion des Départements
+            </h1>
+            <a href="<%=request.getContextPath()%>/admin/departments/create" class="btn-primary">
+                ➕ Créer un département
+            </a>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Liste des départements</h2>
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Rechercher..." id="searchInput">
+                </div>
+            </div>
+
+            <%
+                List<Department> departments = (List<Department>) request.getAttribute("departments");
+                if (departments != null && !departments.isEmpty()) {
+            %>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom du département</th>
+                    <th>Code</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                    for (Department d : departments) {
+                %>
+                <tr>
+                    <td><strong>#<%= d.getId() %></strong></td>
+                    <td><%= d.getName() %></td>
+                    <td><span class="badge badge-code"><%= d.getCode() %></span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="<%=request.getContextPath()%>/admin/departments/edit?id=<%= d.getId() %>" class="btn-edit">✏️ Modifier</a>
+                            <form action="<%=request.getContextPath()%>/admin/departments/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="<%=d.getId()%>"/>
+                                <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce département ?');">🗑️ Supprimer</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+            <%
+            } else {
+            %>
+            <div class="empty-state">
+                <div class="icon">🏥</div>
+                <h3>Aucun département trouvé</h3>
+                <p>Commencez par créer votre premier département</p>
+            </div>
+            <%
+                }
+            %>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchValue) ? '' : 'none';
+        });
+    });
+</script>
+</body>
+</html>

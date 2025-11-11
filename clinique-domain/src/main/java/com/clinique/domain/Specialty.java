@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "specialties")
+@Table(name = "specialties",schema="public")
 public class Specialty {
 
     @Id
@@ -44,6 +44,14 @@ public class Specialty {
 
     public void setId(Long id){
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName(){

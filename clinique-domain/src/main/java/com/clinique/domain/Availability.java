@@ -7,7 +7,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "availabilities")
+@Table(name = "availabilities",schema="public")
 public class Availability {
 
     @Id
@@ -26,12 +26,22 @@ public class Availability {
     @Column(name = "end_time", nullable = false, columnDefinition = "TIME")
     private LocalTime endTime;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    // Constructeurs
     public Availability() {}
+
+    public Availability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime,boolean active, Doctor doctor) {
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.active = active;
+        this.doctor = doctor;
+    }
 
     public Availability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Doctor doctor) {
         this.dayOfWeek = dayOfWeek;
@@ -72,6 +82,14 @@ public class Availability {
         this.endTime = endTime;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public Doctor getDoctor() {
         return doctor;
     }
@@ -80,9 +98,6 @@ public class Availability {
         this.doctor = doctor;
     }
 
-    /**
-     * Méthode métier : Vérifier si une heure est dans cette disponibilité
-     */
     public boolean isAvailableAt(LocalTime time) {
         return !time.isBefore(startTime) && !time.isAfter(endTime);
     }
