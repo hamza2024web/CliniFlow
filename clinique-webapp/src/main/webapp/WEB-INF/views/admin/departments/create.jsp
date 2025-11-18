@@ -306,18 +306,6 @@
                     Spécialités
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <span class="nav-icon">⚙️</span>
-                    Configuration
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <span class="nav-icon">📈</span>
-                    Statistiques
-                </a>
-            </li>
         </ul>
 
         <a href="<%=request.getContextPath()%>/logout" class="logout-btn">Se déconnecter</a>
