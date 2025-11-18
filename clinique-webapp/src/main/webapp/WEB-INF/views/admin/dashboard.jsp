@@ -319,12 +319,6 @@
                     Départements
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="<%= request.getContextPath() %>/admin/specialties" class="nav-link">
-                    <span class="nav-icon">🎓</span>
-                    Spécialités
-                </a>
-            </li>
         </ul>
 
         <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Se déconnecter</a>
